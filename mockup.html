@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMAS Mobility Fleet Report — Mockup</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ── Geotab Zenith tokens (KML add-in standard) ── */
+      --color-primary:          #0078d3;
+      --color-primary-hover:    #005aa8;
+      --color-primary-active:   #004080;
+      --color-secondary:        #4e677e;
+      --color-text:             #1f2833;
+      --color-text-secondary:   #4e677e;
+      --color-text-placeholder: #8da4b9;
+      --color-bg:               #ffffff;
+      --color-surface:          #f2f5f7;
+      --color-surface-light:    #f9fafb;
+      --color-hover:            #e6ebef;
+      --color-border:           #c0ccd8;
+      --color-border-active:    #0078d3;
+      --color-error-bg:         #ffeceb;
+      --color-error-text:       #a01f0e;
+      --color-error-border:     #c51a11;
+      --color-success-bg:       #edfef2;
+      --color-success-text:     #2b6436;
+
+      /* ── Report-specific additions ── */
+      --color-batt-low-bg:   #FCE4D6;
+      --color-batt-low-text: #C00000;
+      --color-tbl-header:    #1F3864;
+      --color-tbl-alt:       #EBF3FB;
+
+      /* ── Spacing scale ── */
+      --sp-1:  4px;
+      --sp-2:  8px;
+      --sp-3: 12px;
+      --sp-4: 16px;
+      --sp-5: 20px;
+      --sp-6: 24px;
+      --sp-8: 32px;
+
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Arial, sans-serif;
+    }
+
+    body {
+      font: 14px/1.5 var(--font);
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+
+    /* ── Screens ─────────────────────────────────────────────── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Layout wrapper ──────────────────────────────────────── */
+    .smas-wrap { padding: 20px 24px; max-width: 900px; }
+
+    /* ── Disclaimer banner ───────────────────────────────────── */
+    .smas-disclaimer {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      background: var(--color-surface-light);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 0 4px 4px 0;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+    .smas-disclaimer svg { color: var(--color-primary); flex-shrink: 0; margin-top: 1px; }
+    .smas-disclaimer strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    /* ── Page header ─────────────────────────────────────────── */
+    .smas-page-header { margin-bottom: var(--sp-5); }
+    .smas-page-title  { font-size: 22px; font-weight: 600; color: var(--color-text); }
+    .smas-page-version {
+      font-size: 11px;
+      color: var(--color-text-placeholder);
+      margin-top: 2px;
+    }
+
+    /* ── Sections ────────────────────────────────────────────── */
+    .smas-section {
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: var(--sp-5);
+      padding-bottom: var(--sp-5);
+    }
+    .smas-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text);
+      margin-bottom: var(--sp-4);
+    }
+
+    /* ── Form fields ─────────────────────────────────────────── */
+    .smas-field { margin-bottom: var(--sp-4); }
+    .smas-field:last-child { margin-bottom: 0; }
+    .smas-field-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--sp-1);
+    }
+    .smas-field-row {
+      display: flex;
+      gap: var(--sp-4);
+    }
+    .smas-field-row .smas-field { flex: 1; margin-bottom: 0; }
+
+    .smas-input-wrap { position: relative; display: flex; align-items: center; }
+    .smas-input-unit {
+      position: absolute;
+      right: 10px;
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      pointer-events: none;
+    }
+    .smas-field-input {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--color-border);
+      background: var(--color-bg);
+      border-radius: 4px;
+      padding: 7px 12px;
+      font: 14px var(--font);
+      color: var(--color-text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .smas-field-input:focus {
+      border-color: var(--color-border-active);
+      box-shadow: 0 0 0 3px rgba(0,120,211,0.15);
+    }
+    .smas-field-input.has-unit { padding-right: 32px; }
+    .smas-field-input.input-error { border-color: var(--color-error-border); }
+    select.smas-field-input {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' fill='%234e677e'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      padding-right: 32px;
+    }
+    .smas-field-helper {
+      display: block;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: var(--sp-1);
+    }
+    .smas-field-error {
+      display: none;
+      font-size: 12px;
+      color: var(--color-error-text);
+      margin-top: var(--sp-1);
+    }
+    .smas-field-error.visible { display: block; }
+
+    /* ── Info note ───────────────────────────────────────────── */
+    .smas-info-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      margin-top: var(--sp-3);
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+    .smas-info-note svg { flex-shrink: 0; margin-top: 1px; color: var(--color-primary); }
+
+    /* ── Advanced collapsible ────────────────────────────────── */
+    details.smas-advanced { margin-top: var(--sp-4); }
+    details.smas-advanced > summary {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--color-secondary);
+      list-style: none;
+      user-select: none;
+      padding: var(--sp-2) 0;
+    }
+    details.smas-advanced > summary::-webkit-details-marker { display: none; }
+    .adv-chevron { transition: transform 0.2s; flex-shrink: 0; }
+    details.smas-advanced[open] .adv-chevron { transform: rotate(180deg); }
+    .adv-body { padding: var(--sp-3) 0 0; }
+    .smas-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-4);
+      margin-top: var(--sp-3);
+    }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .kml-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 var(--sp-4);
+      border-radius: 4px;
+      font: 500 14px/36px var(--font);
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: background 0.15s, box-shadow 0.15s, border-color 0.15s;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .kml-btn--primary {
+      background: var(--color-primary);
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(0,120,211,0.3);
+    }
+    .kml-btn--primary:hover  { background: var(--color-primary-hover); box-shadow: 0 2px 6px rgba(0,120,211,0.4); }
+    .kml-btn--primary:active { background: var(--color-primary-active); }
+    .kml-btn--text {
+      background: transparent;
+      border-color: transparent;
+      color: var(--color-secondary);
+      padding: 0 var(--sp-2);
+    }
+    .kml-btn--text:hover { background: var(--color-hover); color: var(--color-text); }
+    .btn-generate { margin-top: var(--sp-2); }
+
+
+    /* ── SCREEN 2: Generating ────────────────────────────────── */
+    .smas-gen-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 70vh;
+      padding: 20px 24px;
+    }
+    .smas-gen-card {
+      background: var(--color-bg);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: var(--sp-8);
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .smas-spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid var(--color-surface);
+      border-top-color: var(--color-primary);
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+      margin: 0 auto var(--sp-5);
+      transition: opacity 0.4s;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .smas-gen-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--sp-1);
+    }
+    .smas-gen-sub {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--sp-6);
+    }
+    .smas-steps { text-align: left; }
+    .smas-step {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: 7px 0;
+    }
+    .smas-step-icon { width: 20px; height: 20px; flex-shrink: 0; }
+    .smas-step-label { font-size: 14px; }
+    .step-done   .smas-step-icon { color: var(--color-success-text); }
+    .step-done   .smas-step-label { color: var(--color-text-secondary); }
+    .step-active .smas-step-icon { color: var(--color-primary); animation: spin 0.85s linear infinite; }
+    .step-active .smas-step-label { color: var(--color-primary); font-weight: 500; }
+    .step-pending .smas-step-icon { color: var(--color-text-placeholder); }
+    .step-pending .smas-step-label { color: var(--color-text-placeholder); }
+
+
+    /* ── SCREEN 3: Preview ───────────────────────────────────── */
+    .smas-preview-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-4);
+      margin-bottom: var(--sp-5);
+      flex-wrap: wrap;
+    }
+    .smas-preview-title { font-size: 22px; font-weight: 600; color: var(--color-text); }
+    .smas-preview-actions { display: flex; gap: var(--sp-2); align-items: center; }
+
+    /* Stat bar */
+    .smas-stat-bar {
+      display: flex;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: var(--sp-5);
+    }
+    .smas-stat {
+      flex: 1;
+      padding: var(--sp-4) var(--sp-5);
+      text-align: center;
+      border-right: 1px solid var(--color-border);
+    }
+    .smas-stat:last-child { border-right: none; }
+    .smas-stat-value {
+      display: block;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--color-text);
+      line-height: 1.1;
+    }
+    .smas-stat-value.warn { color: var(--color-batt-low-text); }
+    .smas-stat-label {
+      display: block;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Table: Vehicle Summary */
+    .smas-tbl-heading {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--color-text);
+      padding: var(--sp-5) 0 var(--sp-3);
+    }
+    .smas-tbl-wrap {
+      overflow-x: auto;
+      max-height: 420px;
+      overflow-y: auto;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      margin-bottom: var(--sp-5);
+    }
+    .smas-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 1020px;
+    }
+    .smas-tbl thead th {
+      background: var(--color-tbl-header);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 10px 12px;
+      text-align: left;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .smas-tbl thead th.num { text-align: right; }
+    .smas-tbl tbody td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .smas-tbl tbody tr:last-child td { border-bottom: none; }
+    .smas-tbl tbody tr:nth-child(even) td { background: var(--color-tbl-alt); }
+    .smas-tbl tbody tr:nth-child(odd)  td { background: #fff; }
+    .smas-tbl tbody tr:hover td { background: var(--color-hover); }
+    .smas-tbl td.num { text-align: right; }
+    .smas-tbl td.na  { color: var(--color-text-placeholder); font-style: italic; }
+    .smas-tbl td.batt-low {
+      background: var(--color-batt-low-bg) !important;
+      color: var(--color-batt-low-text) !important;
+      font-weight: 700;
+    }
+
+    /* Trip detail collapsible */
+    details.smas-trip-detail {
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      margin-bottom: var(--sp-5);
+    }
+    details.smas-trip-detail > summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-3);
+      padding: var(--sp-3) var(--sp-4);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text);
+      list-style: none;
+      user-select: none;
+      background: var(--color-surface-light);
+      border-radius: 6px;
+    }
+    details.smas-trip-detail[open] > summary {
+      border-radius: 6px 6px 0 0;
+      border-bottom: 1px solid var(--color-border);
+    }
+    details.smas-trip-detail > summary::-webkit-details-marker { display: none; }
+    .trip-chevron { transition: transform 0.2s; flex-shrink: 0; }
+    details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
+    .smas-trip-tbl-wrap { overflow-x: auto; }
+    .smas-trip-tbl {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 800px;
+    }
+    .smas-trip-tbl thead th {
+      background: var(--color-surface);
+      color: var(--color-text-secondary);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      padding: 9px 12px;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .smas-trip-tbl thead th.num { text-align: right; }
+    .smas-trip-tbl tbody td {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+    .smas-trip-tbl tbody tr:last-child td { border-bottom: none; }
+    .smas-trip-tbl tbody tr:nth-child(even) td { background: var(--color-surface-light); }
+    .smas-trip-tbl td.num { text-align: right; }
+
+    /* Preview footer */
+    .smas-preview-footer {
+      padding-top: var(--sp-4);
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      justify-content: flex-end;
+      gap: var(--sp-3);
+    }
+
+    /* ── Toast ───────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1f2833;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      white-space: nowrap;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+    }
+    #toast.visible { opacity: 1; pointer-events: auto; }
+    #toast svg { color: #4cca6e; flex-shrink: 0; }
+
+    /* ── Mobile (≤480px) ─────────────────────────────────────── */
+    @media (max-width: 480px) {
+      .smas-wrap { padding: 14px 16px; }
+      .smas-field-row { flex-direction: column; gap: var(--sp-2); }
+      .smas-grid-3 { grid-template-columns: 1fr; }
+      .btn-generate { width: 100%; }
+      .smas-preview-header { flex-direction: column; align-items: flex-start; }
+      .smas-preview-actions { width: 100%; }
+      .smas-preview-actions .kml-btn { flex: 1; }
+      .smas-stat { padding: var(--sp-3) var(--sp-2); }
+      .smas-stat-value { font-size: 22px; }
+      .smas-preview-footer { flex-direction: column-reverse; }
+      .smas-preview-footer .kml-btn { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 1 — CONFIG
+════════════════════════════════════════════════════════════ -->
+<div id="screen-config" class="screen active">
+  <div class="smas-wrap">
+
+    <!-- Disclaimer -->
+    <div class="smas-disclaimer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style="flex-shrink:0;margin-top:1px">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+      </svg>
+      <div>
+        <strong>Sample add-in / tool</strong>
+        — This tool is provided as an example and is available on an As-Is basis. You must assume all the risks and costs associated with the use of the sample tool, including, without limitation, any damage to any equipment, software, information or data. In addition, we are not obligated to provide any maintenance, technical or other support for the sample tool.
+      </div>
+    </div>
+
+    <!-- Page header -->
+    <div class="smas-page-header">
+      <h1 class="smas-page-title">SMAS Mobility Fleet Report</h1>
+      <p class="smas-page-version">Version 1.0.0</p>
+    </div>
+
+    <!-- Section: Report Period -->
+    <div class="smas-section">
+      <div class="smas-section-title">Report Period</div>
+      <div class="smas-field-row">
+        <div class="smas-field">
+          <label class="smas-field-label" for="startDate">Start Date</label>
+          <input class="smas-field-input" type="date" id="startDate" />
+          <span class="smas-field-error" id="dateError">End date must be after start date.</span>
+        </div>
+        <div class="smas-field">
+          <label class="smas-field-label" for="endDate">End Date</label>
+          <input class="smas-field-input" type="date" id="endDate" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Fleet Filter -->
+    <div class="smas-section">
+      <div class="smas-section-title">Fleet Filter</div>
+      <div class="smas-field">
+        <label class="smas-field-label" for="groupSelect">Vehicle Group</label>
+        <select class="smas-field-input" id="groupSelect">
+          <option value="">All Vehicles</option>
+          <option value="g1">Group A — Operations Fleet</option>
+          <option value="g2">Group B — Executive Fleet</option>
+          <option value="g3">Group C — Logistics</option>
+        </select>
+        <span class="smas-field-helper">Leave as "All Vehicles" to include the entire fleet.</span>
+      </div>
+    </div>
+
+    <!-- Section: Report Settings -->
+    <div class="smas-section">
+      <div class="smas-section-title">Report Settings</div>
+      <div class="smas-field">
+        <label class="smas-field-label" for="battThreshold">Battery Low Threshold</label>
+        <div class="smas-input-wrap">
+          <input class="smas-field-input has-unit" type="number" id="battThreshold"
+                 value="11.5" min="9" max="14" step="0.1" style="max-width:160px" />
+          <span class="smas-input-unit">V</span>
+        </div>
+        <span class="smas-field-helper">Cells below this voltage are highlighted red in the report.</span>
+      </div>
+
+      <div class="smas-info-note">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+        </svg>
+        <span>Fuel type is auto-detected per vehicle from engine diagnostics — no manual selection needed. CO2 factor is applied per vehicle accordingly.</span>
+      </div>
+
+      <!-- Advanced collapsible -->
+      <details class="smas-advanced">
+        <summary>
+          <svg class="adv-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+            <path d="M7 10l5 5 5-5z"/>
+          </svg>
+          Advanced — Rule Name Overrides
+        </summary>
+        <div class="adv-body">
+          <span class="smas-field-helper">Only change these if your MyGeotab database uses non-standard rule names. The report searches for rules whose name contains the keyword below.</span>
+          <div class="smas-grid-3">
+            <div class="smas-field">
+              <label class="smas-field-label" for="ruleCollision">Collision keyword</label>
+              <input class="smas-field-input" type="text" id="ruleCollision" value="collision" />
+            </div>
+            <div class="smas-field">
+              <label class="smas-field-label" for="ruleFillup">Fill-up keyword</label>
+              <input class="smas-field-input" type="text" id="ruleFillup" value="fill" />
+            </div>
+            <div class="smas-field">
+              <label class="smas-field-label" for="ruleSpeeding">Speeding keyword</label>
+              <input class="smas-field-input" type="text" id="ruleSpeeding" value="speed" />
+            </div>
+          </div>
+        </div>
+      </details>
+    </div>
+
+    <!-- Generate button -->
+    <button class="kml-btn kml-btn--primary btn-generate" id="btnGenerate" onclick="startGenerating()">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+        <path d="M8 5v14l11-7z"/>
+      </svg>
+      Generate Report
+    </button>
+
+  </div>
+</div><!-- /screen-config -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 2 — GENERATING
+════════════════════════════════════════════════════════════ -->
+<div id="screen-generating" class="screen">
+  <div class="smas-gen-wrap">
+    <div class="smas-gen-card">
+      <div class="smas-spinner" id="genSpinner"></div>
+      <div class="smas-gen-title">Generating Report&hellip;</div>
+      <div class="smas-gen-sub">Do not close this window.</div>
+      <div class="smas-steps" id="genSteps"></div>
+    </div>
+  </div>
+</div><!-- /screen-generating -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     SCREEN 3 — PREVIEW
+════════════════════════════════════════════════════════════ -->
+<div id="screen-preview" class="screen">
+  <div class="smas-wrap">
+
+    <!-- Header row -->
+    <div class="smas-preview-header">
+      <h1 class="smas-preview-title">Report Preview</h1>
+      <div class="smas-preview-actions">
+        <button class="kml-btn kml-btn--text" onclick="goBack()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+          </svg>
+          Back to Config
+        </button>
+        <button class="kml-btn kml-btn--primary" onclick="downloadExcel()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+          Download Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Stat bar -->
+    <div class="smas-stat-bar">
+      <div class="smas-stat">
+        <span class="smas-stat-value">42</span>
+        <span class="smas-stat-label">Vehicles</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">1,247</span>
+        <span class="smas-stat-label">Trips in Period</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value warn">3</span>
+        <span class="smas-stat-label">Low Battery Alerts</span>
+      </div>
+    </div>
+
+    <!-- Vehicle Summary table -->
+    <div class="smas-tbl-heading">Vehicle Summary <span style="font-size:13px;font-weight:400;color:var(--color-text-secondary)">(showing 8 of 42 vehicles)</span></div>
+    <div class="smas-tbl-wrap">
+      <table class="smas-tbl">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Vehicle Name</th>
+            <th>VIN</th>
+            <th>Serial No.</th>
+            <th class="num">Odometer (km)</th>
+            <th class="num">Fill-up Count</th>
+            <th class="num">Fill-up Vol (L)</th>
+            <th class="num">Fuel Used (L)</th>
+            <th class="num">Max Speed (km/h)</th>
+            <th class="num">Avg Speed (km/h)</th>
+            <th class="num">CO2 (kg)</th>
+            <th class="num">Collisions</th>
+            <th class="num">Idle Events</th>
+            <th>Total Idling</th>
+            <th class="num">Speeding Events</th>
+            <th class="num">Battery (V)</th>
+            <th>Battery Health</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td><td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td><td>GT9000ABCD</td>
+            <td class="num">12,847.3</td><td class="num">3</td><td class="num na">N/A</td><td class="num">187.4</td>
+            <td class="num">118.0</td><td class="num">42.3</td><td class="num">432.5</td>
+            <td class="num">0</td><td class="num">12</td><td>02:14:30</td><td class="num">7</td>
+            <td class="num">12.4</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>2</td><td>SMAS-002</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td><td>GT9000ABCE</td>
+            <td class="num">8,234.1</td><td class="num">4</td><td class="num na">N/A</td><td class="num">143.2</td>
+            <td class="num">124.0</td><td class="num">38.7</td><td class="num">330.6</td>
+            <td class="num">1</td><td class="num">8</td><td>01:47:00</td><td class="num">12</td>
+            <td class="num">13.1</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>3</td><td>SMAS-003</td><td style="font-family:monospace;font-size:12px">MHFRK59K4BJ000123</td><td>GT9000ABCF</td>
+            <td class="num">15,123.8</td><td class="num">2</td><td class="num na">N/A</td><td class="num">224.1</td>
+            <td class="num">112.0</td><td class="num">45.1</td><td class="num">517.1</td>
+            <td class="num">0</td><td class="num">15</td><td>03:02:15</td><td class="num">3</td>
+            <td class="num batt-low">10.8</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>4</td><td>SMAS-004</td><td style="font-family:monospace;font-size:12px">JT3HN86R8W0067890</td><td>GT9000ABCG</td>
+            <td class="num">6,891.4</td><td class="num">5</td><td class="num na">N/A</td><td class="num">98.7</td>
+            <td class="num">109.0</td><td class="num">36.2</td><td class="num">227.8</td>
+            <td class="num">2</td><td class="num">6</td><td>01:12:45</td><td class="num">5</td>
+            <td class="num batt-low">11.2</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>5</td><td>SMAS-005</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td><td>GT9000ABCH</td>
+            <td class="num">21,456.7</td><td class="num">3</td><td class="num na">N/A</td><td class="num">312.8</td>
+            <td class="num">131.0</td><td class="num">51.4</td><td class="num">722.2</td>
+            <td class="num">0</td><td class="num">22</td><td>04:38:00</td><td class="num">18</td>
+            <td class="num">12.7</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>6</td><td>SMAS-006</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td><td>GT9000ABCI</td>
+            <td class="num">9,321.5</td><td class="num">4</td><td class="num na">N/A</td><td class="num">134.5</td>
+            <td class="num">97.0</td><td class="num">33.8</td><td class="num">310.5</td>
+            <td class="num">3</td><td class="num">9</td><td>02:05:30</td><td class="num">9</td>
+            <td class="num">12.6</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>7</td><td>SMAS-007</td><td style="font-family:monospace;font-size:12px">JT3HN86R2W0071234</td><td>GT9000ABCJ</td>
+            <td class="num">4,567.2</td><td class="num">2</td><td class="num na">N/A</td><td class="num">67.3</td>
+            <td class="num">103.0</td><td class="num">29.4</td><td class="num">155.4</td>
+            <td class="num">0</td><td class="num">4</td><td>00:48:20</td><td class="num">2</td>
+            <td class="num">13.0</td><td class="na">N/A (API)</td>
+          </tr>
+          <tr>
+            <td>8</td><td>SMAS-008</td><td style="font-family:monospace;font-size:12px">MR0HY8CD9J0345678</td><td>GT9000ABCK</td>
+            <td class="num">18,934.6</td><td class="num">6</td><td class="num na">N/A</td><td class="num">278.2</td>
+            <td class="num">126.0</td><td class="num">47.8</td><td class="num">642.5</td>
+            <td class="num">1</td><td class="num">18</td><td>03:45:10</td><td class="num">14</td>
+            <td class="num">12.5</td><td class="na">N/A (API)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Trip Detail collapsible -->
+    <details class="smas-trip-detail">
+      <summary>
+        <span>Trip Detail &nbsp;<span style="font-weight:400;color:var(--color-text-secondary)">(showing first 5 of 1,247 trips)</span></span>
+        <svg class="trip-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M7 10l5 5 5-5z"/>
+        </svg>
+      </summary>
+      <div class="smas-trip-tbl-wrap">
+        <table class="smas-trip-tbl">
+          <thead>
+            <tr>
+              <th>Vehicle Name</th>
+              <th>VIN</th>
+              <th>Trip Start</th>
+              <th>Trip End</th>
+              <th>Duration</th>
+              <th class="num">Distance (km)</th>
+              <th class="num">Avg Speed</th>
+              <th class="num">Max Speed</th>
+              <th>Idling Duration</th>
+              <th class="num">Odometer End (km)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
+              <td>2025-01-02 08:14:23</td><td>2025-01-02 09:47:11</td><td>01:32:48</td>
+              <td class="num">67.4</td><td class="num">43.8</td><td class="num">118.0</td><td>00:12:30</td><td class="num">11,234.1</td>
+            </tr>
+            <tr>
+              <td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
+              <td>2025-01-03 07:52:06</td><td>2025-01-03 10:11:44</td><td>02:19:38</td>
+              <td class="num">98.2</td><td class="num">42.2</td><td class="num">97.0</td><td>00:28:15</td><td class="num">11,332.3</td>
+            </tr>
+            <tr>
+              <td>SMAS-002</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td>
+              <td>2025-01-02 09:01:35</td><td>2025-01-02 10:44:22</td><td>01:42:47</td>
+              <td class="num">72.3</td><td class="num">42.1</td><td class="num">124.0</td><td>00:15:00</td><td class="num">7,812.4</td>
+            </tr>
+            <tr>
+              <td>SMAS-005</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td>
+              <td>2025-01-04 06:30:00</td><td>2025-01-04 11:15:33</td><td>04:45:33</td>
+              <td class="num">234.1</td><td class="num">49.2</td><td class="num">131.0</td><td>00:41:20</td><td class="num">20,123.8</td>
+            </tr>
+            <tr>
+              <td>SMAS-006</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td>
+              <td>2025-01-02 13:20:17</td><td>2025-01-02 15:08:49</td><td>01:48:32</td>
+              <td class="num">61.8</td><td class="num">34.1</td><td class="num">97.0</td><td>00:23:45</td><td class="num">8,654.2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </details>
+
+    <!-- Footer -->
+    <div class="smas-preview-footer">
+      <button class="kml-btn kml-btn--text" onclick="goBack()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to Config
+      </button>
+      <button class="kml-btn kml-btn--primary" onclick="downloadExcel()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
+        Download Excel
+      </button>
+    </div>
+
+  </div>
+</div><!-- /screen-preview -->
+
+
+<!-- Toast -->
+<div id="toast">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+  </svg>
+  Report downloaded successfully.
+</div>
+
+
+<script>
+  /* ── Date defaults: first/last day of previous month ─── */
+  (function () {
+    var now  = new Date();
+    var y    = now.getMonth() === 0 ? now.getFullYear() - 1 : now.getFullYear();
+    var m    = now.getMonth() === 0 ? 12 : now.getMonth();
+    var last = new Date(y, m, 0).getDate();
+    var pad  = function (n) { return String(n).padStart(2, '0'); };
+    document.getElementById('startDate').value = y + '-' + pad(m) + '-01';
+    document.getElementById('endDate').value   = y + '-' + pad(m) + '-' + pad(last);
+  }());
+
+  /* ── Screen management ─────────────────────────────────── */
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(function (s) {
+      s.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+  }
+
+  function goBack() { showScreen('screen-config'); }
+
+  /* ── Validation ────────────────────────────────────────── */
+  function validate() {
+    var s  = document.getElementById('startDate').value;
+    var e  = document.getElementById('endDate').value;
+    var si = document.getElementById('startDate');
+    var ei = document.getElementById('endDate');
+    var er = document.getElementById('dateError');
+    si.classList.remove('input-error');
+    ei.classList.remove('input-error');
+    er.classList.remove('visible');
+    if (!s || !e) return true;
+    if (s >= e) {
+      si.classList.add('input-error');
+      ei.classList.add('input-error');
+      er.classList.add('visible');
+      return false;
+    }
+    return true;
+  }
+  document.getElementById('startDate').addEventListener('change', validate);
+  document.getElementById('endDate').addEventListener('change', validate);
+
+  /* ── Generating animation ──────────────────────────────── */
+  var STEPS = [
+    'Connecting to MyGeotab',
+    'Fetching vehicle list',
+    'Detecting fuel types per vehicle',
+    'Fetching trips',
+    'Fetching fuel consumed & exceptions',
+    'Fetching battery voltage data',
+    'Building Excel report'
+  ];
+
+  var ICON_DONE = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+  var ICON_SPIN = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 14.03 20 13.07 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>';
+  var ICON_DOT  = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><circle cx="12" cy="12" r="4"/></svg>';
+
+  function renderSteps(activeIdx) {
+    var html = '';
+    STEPS.forEach(function (label, i) {
+      var cls, icon;
+      if (i < activeIdx)       { cls = 'step-done';    icon = ICON_DONE; }
+      else if (i === activeIdx) { cls = 'step-active';  icon = ICON_SPIN; }
+      else                      { cls = 'step-pending'; icon = ICON_DOT;  }
+      html += '<div class="smas-step ' + cls + '">'
+            + '<span class="smas-step-icon">' + icon + '</span>'
+            + '<span class="smas-step-label">' + label + '</span>'
+            + '</div>';
+    });
+    document.getElementById('genSteps').innerHTML = html;
+  }
+
+  function startGenerating() {
+    if (!validate()) return;
+    showScreen('screen-generating');
+
+    var step = 2;   /* steps 0 and 1 already done when screen loads */
+    renderSteps(step);
+
+    var timer = setInterval(function () {
+      step += 1;
+      if (step >= STEPS.length) {
+        clearInterval(timer);
+        renderSteps(STEPS.length);   /* mark all done */
+        document.getElementById('genSpinner').style.opacity = '0';
+        setTimeout(function () { showScreen('screen-preview'); }, 700);
+        return;
+      }
+      renderSteps(step);
+    }, 900);
+  }
+
+  /* ── Download toast ────────────────────────────────────── */
+  function downloadExcel() {
+    var t = document.getElementById('toast');
+    t.classList.add('visible');
+    setTimeout(function () { t.classList.remove('visible'); }, 3000);
+  }
+</script>
+
+</body>
+</html>
