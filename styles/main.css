@@ -549,17 +549,19 @@ details.smas-trip-detail {
 details.smas-trip-detail > summary {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-3);
-  padding: var(--sp-3) var(--sp-4);
+  gap: var(--sp-2);
+  padding: 10px var(--sp-4);
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--g-text-primary);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--g-text-secondary);
   list-style: none;
   user-select: none;
   background: var(--g-background-content-0);
   border-radius: 8px;
+}
+details.smas-trip-detail > summary:hover {
+  color: var(--g-text-primary);
 }
 details.smas-trip-detail[open] > summary {
   border-radius: 8px 8px 0 0;
@@ -569,17 +571,11 @@ details.smas-trip-detail > summary::-webkit-details-marker { display: none; }
 .trip-chevron {
   transition: transform 0.2s;
   flex-shrink: 0;
-  font-size: 20px;
-  color: var(--g-text-secondary);
+  font-size: 18px;
 }
 details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
-.smas-trip-header {
-  display: flex;
-  justify-content: flex-end;
-  padding: var(--sp-3) var(--sp-4);
-  border-bottom: 1px solid var(--g-borders-general);
-  background: var(--g-background-content-0);
-}
+details.smas-trip-detail[open] .smas-trip-toggle-label { display: none; }
+details.smas-trip-detail[open]::after { content: none; }
 .smas-trip-tbl-wrap {
   overflow-x: auto;
   max-height: 420px;

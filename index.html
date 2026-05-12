@@ -201,19 +201,20 @@
       </table>
     </div>
 
+    <div class="smas-tbl-header">
+      <div class="smas-tbl-heading">Trip Detail</div>
+      <div class="smas-pagination" id="tripPagination">
+        <span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
+        <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
+      </div>
+    </div>
     <details class="smas-trip-detail">
       <summary>
-        <span>Trip Detail</span>
+        <span class="smas-trip-toggle-label">Show trips</span>
         <span class="material-symbols-rounded trip-chevron">expand_more</span>
       </summary>
-      <div class="smas-trip-header">
-        <div class="smas-pagination" id="tripPagination">
-          <span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span>
-          <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
-          <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
-          <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
-        </div>
-      </div>
       <div class="smas-trip-tbl-wrap">
         <table class="smas-trip-tbl">
           <thead>
