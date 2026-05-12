@@ -53,8 +53,9 @@ The add-in runs entirely in the browser — no server required. All API calls, a
 
 ## Prerequisites
 
-- A MyGeotab account with access to the target fleet
+- A MyGeotab account with **Administrator** access (required to upload add-ins)
 - Vehicles must have trip data and diagnostics enabled
+- Python 3 — *only* if you are building the ZIP from source (not needed if you already have `smas-mobility-fleet-report.zip`)
 
 ---
 
@@ -63,7 +64,7 @@ The add-in runs entirely in the browser — no server required. All API calls, a
 ```
 smas-mobility-fleet-report/
 ├── index.html                  # Add-in entry point
-├── config.json                 # Add-in manifest
+├── build_zip.py                # Build script — produces dist/smas-mobility-fleet-report.zip
 ├── mockup.html                 # Standalone UI mockup (development)
 ├── images/
 │   └── icon.svg                # Add-in menu icon
@@ -71,39 +72,63 @@ smas-mobility-fleet-report/
 │   └── main.js                 # Add-in logic (API calls, aggregation, Excel)
 ├── styles/
 │   └── main.css                # MYG design system styling
+├── dist/                       # Build output (gitignored)
+│   └── smas-mobility-fleet-report.zip
 └── smas_mobility_fleet_report.ipynb  # Original Python notebook (Colab)
 ```
 
 ---
 
-## Setup: Register in MyGeotab
+## Setup: Install in MyGeotab
 
-### Step 1: Copy the add-in manifest
+> **Already have the ZIP?** Skip to *Step 2 — Upload*. Step 1 is only for building from source.
 
-```json
-{
-  "name": "SMAS Mobility Fleet Report",
-  "version": "1.0.0",
-  "supportEmail": "farinnugraha@geotab.com",
-  "items": [{
-    "version": "1.0.0",
-    "url": "https://farindn.github.io/smas-mobility-fleet-report/index.html",
-    "path": "ActivityLink/",
-    "menuName": { "en": "SMAS Mobility Fleet Report" },
-    "icon": "https://farindn.github.io/smas-mobility-fleet-report/images/icon.svg"
-  }],
-  "isSigned": false
-}
+### Step 1 — Build the ZIP (source only)
+
+```bash
+python build_zip.py
 ```
 
-### Step 2: Register in MyGeotab
+This produces `dist/smas-mobility-fleet-report.zip` containing:
 
-1. Go to **Administration → System → System Settings → Add-Ins**
-2. Click **New Add-In**
-3. Paste the manifest above
-4. Click **OK** → **Save**
+```
+smas-mobility-fleet-report.zip
+├── configuration.json
+└── SMAS Mobility Fleet Report/
+    ├── index.html
+    ├── main.js
+    ├── main.css
+    └── icon.svg
+```
 
-The add-in appears under **Activity → SMAS Mobility Fleet Report**.
+The build script automatically:
+- Embeds the icon as a base64 data URI in `configuration.json`
+- Rewrites HTML asset paths to match the flat folder structure
+- Sets `category: "ReportsId"` so the add-in lands under the **Reports** menu (edit `build_zip.py` to change this — see [MyGeotab category values](https://docs.google.com/document/d/1zWboQArdttoMrVwNILe4vTh0hEKiBgI8Ch2vEcshlYE/edit))
+
+### Step 2 — Upload to MyGeotab
+
+1. Sign in to MyGeotab as an **Administrator**
+2. Go to **Administration → System → System Settings → Add-Ins**
+3. Click **New Add-In**
+4. Click the **upload** button and select `smas-mobility-fleet-report.zip`
+5. Click **OK** → **Save**
+6. Refresh the page (Ctrl+R / Cmd+R)
+
+The add-in now appears under **Reports → SMAS Mobility Fleet Report** in the left-hand navigation.
+
+### Updating to a new version
+
+1. Build a new ZIP (`python build_zip.py`) or obtain the updated ZIP file
+2. In MyGeotab, go to **Administration → System → System Settings → Add-Ins**
+3. Click the existing **SMAS Mobility Fleet Report** entry → **Remove**
+4. Click **New Add-In** and upload the updated ZIP
+5. **OK** → **Save** → Refresh
+
+### Uninstalling
+
+1. **Administration → System → System Settings → Add-Ins**
+2. Click the **SMAS Mobility Fleet Report** entry → **Remove** → **Save**
 
 ---
 
@@ -173,21 +198,6 @@ The original Python notebook is still available for ad-hoc runs:
 | Max Speed (km/h) | `Trip.maximumSpeed` |
 | Idling Duration | `Trip.stopDuration` |
 | Odometer End (km) | `Trip.odometer` |
-
----
-
-## GitHub Pages Deployment
-
-The add-in is hosted on GitHub Pages at:
-
-**https://farindn.github.io/smas-mobility-fleet-report/**
-
-To deploy your own fork:
-
-1. Fork this repository
-2. Go to **Settings → Pages → Source** → select **Deploy from a branch** → `main`
-3. Update the `url` and `icon` fields in `config.json` to your own Pages URL
-4. Push to `main` — GitHub Pages deploys automatically
 
 ---
 

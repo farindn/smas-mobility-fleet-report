@@ -1,10 +1,14 @@
 # Output files
 *.xlsx
 
+# Build output
+dist/
+
 # Python
 __pycache__/
 *.pyc
 .env
+.venv/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
