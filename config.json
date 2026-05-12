@@ -5,12 +5,12 @@
   "items": [
     {
       "version": "1.0.0",
-      "url": "https://farindn.github.io/smas-mobility-fleet-report/mockup.html",
+      "url": "https://farindn.github.io/smas-mobility-fleet-report/smasMobilityFleetReport.html",
       "path": "ActivityLink/",
       "menuName": {
         "en": "SMAS Mobility Fleet Report"
       },
-      "icon": "images/icon.svg"
+      "icon": "https://farindn.github.io/smas-mobility-fleet-report/images/icon.svg"
     }
   ],
   "isSigned": false
