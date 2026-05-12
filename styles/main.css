@@ -22,8 +22,6 @@
 
   --color-batt-low-bg:   #FCE4D6;
   --color-batt-low-text: #C00000;
-  --color-tbl-header:    #1F3864;
-  --color-tbl-alt:       #EBF3FB;
 
   --sp-1:  4px;
   --sp-2:  8px;
@@ -65,17 +63,19 @@ body {
 }
 .smas-disclaimer svg { color: var(--color-primary); flex-shrink: 0; margin-top: 1px; }
 .smas-disclaimer strong {
-  display: block;
   font-size: 13px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--color-text);
-  margin-bottom: 4px;
 }
 
 /* ── Page header ───────────────────────────────────────── */
-.smas-page-header { margin-bottom: var(--sp-5); }
+.smas-page-header {
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--color-border);
+}
 .smas-page-title  { font-size: 22px; font-weight: 600; color: var(--color-text); }
 .smas-page-version {
   font-size: 11px;
@@ -278,15 +278,17 @@ select.smas-field-input {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 4px;
   overflow: hidden;
   margin-bottom: var(--sp-5);
+  background: #fff;
 }
 .smas-stat {
-  padding: 14px 16px;
-  text-align: center;
+  padding: 16px;
+  text-align: left;
   border-right: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+  background: #fff;
 }
 .smas-stat:nth-child(4n)   { border-right: none; }
 .smas-stat:nth-child(n+9)  { border-bottom: none; }
@@ -294,16 +296,19 @@ select.smas-field-input {
 .smas-stat-value {
   display: block;
   font-size: 22px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text);
-  line-height: 1.1;
+  line-height: 1.2;
 }
 .smas-stat-value.warn { color: var(--color-batt-low-text); }
 .smas-stat-label {
   display: block;
   font-size: 12px;
   color: var(--color-text-secondary);
-  margin-top: 2px;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
 }
 
 /* Table: Vehicle Summary */
@@ -323,7 +328,7 @@ select.smas-field-input {
   max-height: 420px;
   overflow-y: auto;
   border: 1px solid var(--color-border);
-  border-radius: 6px;
+  border-radius: 4px;
   margin-bottom: var(--sp-5);
 }
 .smas-tbl {
@@ -333,30 +338,31 @@ select.smas-field-input {
   min-width: 1020px;
 }
 .smas-tbl thead th {
-  background: var(--color-tbl-header);
-  color: #fff;
-  font-size: 11px;
+  background: #fff;
+  color: var(--color-text);
+  font-size: 14px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  padding: 10px 12px;
+  padding: 0 12px;
+  height: 36px;
   text-align: left;
   white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 1;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
 }
 .smas-tbl thead th.num { text-align: right; }
 .smas-tbl tbody td {
-  padding: 9px 12px;
+  padding: 0 12px;
+  height: 40px;
   border-bottom: 1px solid var(--color-border);
   vertical-align: middle;
   white-space: nowrap;
+  background: #fff;
 }
 .smas-tbl tbody tr:last-child td { border-bottom: none; }
-.smas-tbl tbody tr:nth-child(even) td { background: var(--color-tbl-alt); }
-.smas-tbl tbody tr:nth-child(odd)  td { background: #fff; }
-.smas-tbl tbody tr:hover td { background: var(--color-hover); }
+.smas-tbl tbody tr:hover td { background: #eff2f7; }
 .smas-tbl td.num { text-align: right; }
 .smas-tbl td.na  { color: var(--color-text-placeholder); font-style: italic; }
 .smas-tbl td.batt-low {
@@ -425,24 +431,26 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
   min-width: 800px;
 }
 .smas-trip-tbl thead th {
-  background: var(--color-surface);
-  color: var(--color-text-secondary);
-  font-size: 11px;
+  background: #fff;
+  color: var(--color-text);
+  font-size: 14px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  padding: 9px 12px;
+  padding: 0 12px;
+  height: 36px;
   text-align: left;
   white-space: nowrap;
+  border-bottom: 1px solid var(--color-border);
 }
 .smas-trip-tbl thead th.num { text-align: right; }
 .smas-trip-tbl tbody td {
-  padding: 8px 12px;
+  padding: 0 12px;
+  height: 40px;
   border-bottom: 1px solid var(--color-border);
   white-space: nowrap;
+  background: #fff;
 }
 .smas-trip-tbl tbody tr:last-child td { border-bottom: none; }
-.smas-trip-tbl tbody tr:nth-child(even) td { background: var(--color-surface-light); }
+.smas-trip-tbl tbody tr:hover td { background: #eff2f7; }
 .smas-trip-tbl td.num { text-align: right; }
 
 /* Preview footer */
