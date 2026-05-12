@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMAS Mobility Fleet Report</title>
 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="styles/main.css" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -20,17 +21,14 @@
 <div id="screen-config" class="screen active">
   <div class="smas-wrap">
 
-    <div class="smas-disclaimer">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-      </svg>
-      <span><strong>Sample add-in / tool</strong> — This tool is provided as an example and is available on an As-Is basis. You must assume all the risks and costs associated with the use of the sample tool, including, without limitation, any damage to any equipment, software, information or data. In addition, we are not obligated to provide any maintenance, technical or other support for the sample tool.</span>
-    </div>
-
     <div class="smas-page-header">
-      <h1 class="smas-page-title">SMAS Mobility Fleet Report</h1>
+      <div class="smas-page-header__title-row">
+        <h1 class="smas-page-title">SMAS Mobility Fleet Report</h1>
+        <span class="smas-addin-pill"><span class="material-symbols-rounded">extension</span>Add-In</span>
+      </div>
       <p class="smas-page-version">Version 1.0.0</p>
     </div>
+    <div class="smas-page-divider"></div>
 
     <div class="smas-section">
       <div class="smas-section-title">Report Period</div>
@@ -71,17 +69,13 @@
       </div>
 
       <div class="smas-info-note">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-        </svg>
+        <span class="material-symbols-rounded">info</span>
         <span>Fuel type is auto-detected per vehicle from engine diagnostics — no manual selection needed. CO2 factor is applied per vehicle accordingly.</span>
       </div>
     </div>
 
-    <button class="kml-btn kml-btn--primary btn-generate" id="btnGenerate" onclick="startGenerating()">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-        <path d="M8 5v14l11-7z"/>
-      </svg>
+    <button class="smas-btn smas-btn--primary btn-generate" id="btnGenerate" onclick="startGenerating()">
+      <span class="material-symbols-rounded">play_arrow</span>
       Generate Report
     </button>
 
@@ -107,53 +101,57 @@
   <div class="smas-wrap">
 
     <div class="smas-preview-header">
-      <h1 class="smas-preview-title">Report Preview</h1>
+      <div class="smas-preview-header__title-row">
+        <h1 class="smas-preview-title">Report Preview</h1>
+        <span class="smas-addin-pill"><span class="material-symbols-rounded">extension</span>Add-In</span>
+      </div>
     </div>
+    <div class="smas-page-divider"></div>
 
     <div class="smas-stat-bar">
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Total Vehicles</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Archived (in Period)</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Total Customers</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Max Speed (km/h)</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Fuel Consumed (L)</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">CO&#x2082; Emissions (kg)</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Minor Collisions</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Major Collisions</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Total Idling</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Speeding Events</span>
+        <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">--</span>
         <span class="smas-stat-label">Low Battery</span>
+        <span class="smas-stat-value">--</span>
       </div>
     </div>
 
@@ -185,18 +183,16 @@
       </table>
     </div>
     <div class="smas-pagination" id="vehiclePagination">
-      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)">&#8249; Prev</button>
+      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
       <span class="smas-pg-info" id="vehiclePageInfo">Page 1 of 1</span>
-      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next &#8250;</button>
-      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehicleShowAll" onclick="vehicleToggleAll()">Show All</button>
+      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
+      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleShowAll" onclick="vehicleToggleAll()">Show All</button>
     </div>
 
     <details class="smas-trip-detail">
       <summary>
         <span>Trip Detail &nbsp;<span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span></span>
-        <svg class="trip-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-          <path d="M7 10l5 5 5-5z"/>
-        </svg>
+        <span class="material-symbols-rounded trip-chevron">expand_more</span>
       </summary>
       <div class="smas-trip-tbl-wrap">
         <table class="smas-trip-tbl">
@@ -219,24 +215,20 @@
         </table>
       </div>
       <div class="smas-pagination" id="tripPagination">
-        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)">&#8249; Prev</button>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
         <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
-        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next &#8250;</button>
-        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripShowAll" onclick="tripToggleAll()">Show All</button>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripShowAll" onclick="tripToggleAll()">Show All</button>
       </div>
     </details>
 
     <div class="smas-preview-footer">
-      <button class="kml-btn kml-btn--text" onclick="goBack()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-        </svg>
+      <button class="smas-btn smas-btn--secondary" onclick="goBack()">
+        <span class="material-symbols-rounded">arrow_back</span>
         Back to Config
       </button>
-      <button class="kml-btn kml-btn--primary" onclick="downloadExcel()">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>
+      <button class="smas-btn smas-btn--primary" onclick="downloadExcel()">
+        <span class="material-symbols-rounded">download</span>
         Download Excel
       </button>
     </div>
@@ -246,9 +238,7 @@
 
 <!-- Toast -->
 <div id="toast">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-  </svg>
+  <span class="material-symbols-rounded">check_circle</span>
   Report downloaded successfully.
 </div>
 
