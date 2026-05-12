@@ -3,7 +3,10 @@
 Build a ZIP-archived add-in for MyGeotab upload.
 
 Usage: python build_zip.py
-Output: dist/smas-mobility-fleet-report.zip
+Output: releases/smas-mobility-fleet-report.zip
+
+The releases/ folder is committed to git so partners can download the
+ZIP directly from the GitHub repo.
 
 Structure matches the working SampleAddins.zip pattern:
   configuration.json           <- note: "configuration.json", not "config.json"
@@ -21,7 +24,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-DIST = ROOT / "dist"
+RELEASES = ROOT / "releases"
 ADDIN_FOLDER = "SMAS Mobility Fleet Report"
 
 SOURCE_FILES = {
@@ -64,8 +67,8 @@ def main():
         ],
     }
 
-    DIST.mkdir(parents=True, exist_ok=True)
-    zip_path = DIST / "smas-mobility-fleet-report.zip"
+    RELEASES.mkdir(parents=True, exist_ok=True)
+    zip_path = RELEASES / "smas-mobility-fleet-report.zip"
 
     with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
         # Write configuration.json at root

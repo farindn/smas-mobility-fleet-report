@@ -63,7 +63,7 @@ The add-in runs entirely in the browser — no server required. All API calls, a
 ```
 addin-smas-mobility-fleet-report/
 ├── index.html                  # Add-in entry point
-├── build_zip.py                # Build script (maintainer use) — produces dist/smas-mobility-fleet-report.zip
+├── build_zip.py                # Build script (maintainer use)
 ├── mockup.html                 # Standalone UI mockup (development)
 ├── images/
 │   └── icon.svg                # Add-in menu icon
@@ -71,8 +71,8 @@ addin-smas-mobility-fleet-report/
 │   └── main.js                 # Add-in logic (API calls, aggregation, Excel)
 ├── styles/
 │   └── main.css                # MYG design system styling
-├── dist/                       # Build output (gitignored)
-│   └── smas-mobility-fleet-report.zip
+├── releases/
+│   └── smas-mobility-fleet-report.zip  # Prebuilt add-in for upload
 └── smas_mobility_fleet_report.ipynb  # Original Python notebook (Colab)
 ```
 
@@ -82,7 +82,7 @@ addin-smas-mobility-fleet-report/
 
 ### Step 1 — Download the add-in
 
-Download `smas-mobility-fleet-report.zip` from the [latest release](../../releases/latest).
+[**Download smas-mobility-fleet-report.zip**](releases/smas-mobility-fleet-report.zip?raw=true)
 
 ### Step 2 — Upload to MyGeotab
 
@@ -97,7 +97,7 @@ The add-in now appears under **Reports → SMAS Mobility Fleet Report** in the l
 
 ### Updating to a new version
 
-1. Download the new ZIP from the [releases page](../../releases)
+1. [Download the latest ZIP](releases/smas-mobility-fleet-report.zip?raw=true)
 2. In MyGeotab, go to **Administration → System → System Settings → Add-Ins**
 3. Click the existing **SMAS Mobility Fleet Report** entry → **Remove**
 4. Click **New Add-In** and upload the new ZIP
