@@ -34,7 +34,8 @@
   --sp-6: 24px;
   --sp-8: 32px;
 
-  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', Arial, sans-serif;
+  --font: Roboto, "Segoe UI", Segoe, "Helvetica Neue", Helvetica, sans-serif;
+  --font-mono: "Roboto Mono", "SF Mono", Monaco, "Cascadia Code", monospace;
 }
 
 /* Material Symbols */
@@ -332,7 +333,12 @@ select.smas-field-input {
 
 /* ── SCREEN 3: Preview ─────────────────────────────────── */
 .smas-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: var(--sp-4);
+  flex-wrap: wrap;
 }
 .smas-preview-header__title-row {
   display: flex;
@@ -354,14 +360,30 @@ select.smas-field-input {
   margin-bottom: var(--sp-5);
 }
 .smas-stat {
-  height: 80px;
-  padding: 12px;
+  height: 88px;
+  padding: 12px 16px;
   background: var(--backgrounds-main);
   border: 1px solid var(--borders-general);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  cursor: default;
+}
+.smas-stat:hover {
+  border-color: var(--borders-form-hover);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+.smas-stat-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.smas-stat-icon {
+  font-size: 18px;
+  color: var(--text-secondary);
 }
 .smas-stat-label {
   font-size: 12px;
@@ -376,13 +398,19 @@ select.smas-field-input {
 }
 .smas-stat-value.warn { color: var(--color-batt-low-text); }
 
-/* Section header with divider */
+/* Table header bar with title + pagination */
+.smas-tbl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: var(--sp-3);
+}
 .smas-tbl-heading {
   display: flex;
   align-items: center;
   gap: 16px;
   min-height: 32px;
-  margin-bottom: var(--sp-3);
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.16px;
@@ -401,6 +429,13 @@ select.smas-field-input {
   font-weight: 400;
   color: var(--text-secondary);
   margin-left: 8px;
+}
+
+/* Preview header with actions */
+.smas-preview-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
 }
 
 /* Table wrapper */
@@ -424,18 +459,23 @@ select.smas-field-input {
   font-size: 14px;
   font-weight: 500;
   padding: 0 12px;
-  height: 36px;
+  height: 44px;
   text-align: left;
   white-space: nowrap;
   position: sticky;
   top: 0;
   z-index: 1;
   border-bottom: 1px solid var(--borders-general);
+  border-right: 1px solid var(--borders-general);
+  transition: background 0.15s;
+  cursor: default;
 }
+.smas-tbl thead th:last-child { border-right: none; }
+.smas-tbl thead th:hover { background: var(--backgrounds-content-1); }
 .smas-tbl thead th.num { text-align: right; }
 .smas-tbl tbody td {
   padding: 0 12px;
-  height: 40px;
+  height: 48px;
   border-bottom: 1px solid var(--borders-general);
   vertical-align: middle;
   white-space: nowrap;
@@ -458,11 +498,14 @@ select.smas-field-input {
 
 /* Pagination controls */
 .smas-pagination {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: var(--sp-3) 0;
+}
+.smas-pagination--bottom {
+  display: flex;
   justify-content: flex-end;
+  padding: var(--sp-3) 0;
 }
 .smas-pg-info {
   font-size: 14px;
@@ -508,6 +551,13 @@ details.smas-trip-detail > summary::-webkit-details-marker { display: none; }
   color: var(--text-secondary);
 }
 details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
+.smas-trip-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--borders-general);
+  background: var(--backgrounds-content-0);
+}
 .smas-trip-tbl-wrap { overflow-x: auto; }
 .smas-trip-tbl {
   width: 100%;
@@ -521,15 +571,20 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
   font-size: 14px;
   font-weight: 500;
   padding: 0 12px;
-  height: 36px;
+  height: 44px;
   text-align: left;
   white-space: nowrap;
   border-bottom: 1px solid var(--borders-general);
+  border-right: 1px solid var(--borders-general);
+  transition: background 0.15s;
+  cursor: default;
 }
+.smas-trip-tbl thead th:last-child { border-right: none; }
+.smas-trip-tbl thead th:hover { background: var(--backgrounds-content-1); }
 .smas-trip-tbl thead th.num { text-align: right; }
 .smas-trip-tbl tbody td {
   padding: 0 12px;
-  height: 40px;
+  height: 48px;
   border-bottom: 1px solid var(--borders-general);
   white-space: nowrap;
   background: var(--backgrounds-main);
@@ -538,15 +593,6 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
 .smas-trip-tbl tbody tr:hover td { background: var(--backgrounds-content-1); }
 .smas-trip-tbl td.num { text-align: right; }
 
-/* Preview footer */
-.smas-preview-footer {
-  padding-top: var(--sp-4);
-  border-top: 1px solid var(--borders-general);
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--sp-3);
-  flex-wrap: wrap;
-}
 
 /* ── Toast ─────────────────────────────────────────────── */
 #toast {
@@ -587,12 +633,14 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
   .smas-page-divider { margin: 0 -16px var(--sp-4); }
   .smas-page-title { font-size: 22px; line-height: 28px; }
   .smas-preview-title { font-size: 22px; line-height: 28px; }
+  .smas-preview-header { flex-direction: column; align-items: flex-start; }
+  .smas-preview-actions { width: 100%; }
+  .smas-preview-actions .smas-btn { flex: 1; }
   .smas-field-row { flex-direction: column; gap: var(--sp-2); }
   .btn-generate { width: 100%; }
   .smas-stat-bar { grid-template-columns: repeat(2, 1fr); }
-  .smas-stat { height: 72px; padding: 10px; }
+  .smas-stat { height: 80px; padding: 10px; }
   .smas-stat-value { font-size: 20px; line-height: 28px; }
-  .smas-preview-footer { flex-direction: column-reverse; }
-  .smas-preview-footer .smas-btn { width: 100%; }
-  .smas-pagination { justify-content: center; flex-wrap: wrap; }
+  .smas-tbl-header { flex-direction: column; align-items: flex-start; gap: var(--sp-2); }
+  .smas-pagination { flex-wrap: wrap; justify-content: flex-start; }
 }

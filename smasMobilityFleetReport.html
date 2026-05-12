@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMAS Mobility Fleet Report</title>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
   <link rel="stylesheet" href="styles/main.css" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -105,57 +106,75 @@
         <h1 class="smas-preview-title">Report Preview</h1>
         <span class="smas-addin-pill"><span class="material-symbols-rounded">extension</span>Add-In</span>
       </div>
+      <div class="smas-preview-actions">
+        <button class="smas-btn smas-btn--secondary" onclick="goBack()">
+          <span class="material-symbols-rounded">arrow_back</span>
+          Back
+        </button>
+        <button class="smas-btn smas-btn--primary" onclick="downloadExcel()">
+          <span class="material-symbols-rounded">download</span>
+          Download Excel
+        </button>
+      </div>
     </div>
     <div class="smas-page-divider"></div>
 
     <div class="smas-stat-bar">
       <div class="smas-stat">
-        <span class="smas-stat-label">Total Vehicles</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">directions_car</span><span class="smas-stat-label">Total Vehicles</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Archived (in Period)</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">inventory_2</span><span class="smas-stat-label">Archived (in Period)</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Total Customers</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">groups</span><span class="smas-stat-label">Total Customers</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Max Speed (km/h)</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">speed</span><span class="smas-stat-label">Max Speed (km/h)</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Fuel Consumed (L)</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">local_gas_station</span><span class="smas-stat-label">Fuel Consumed (L)</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">CO&#x2082; Emissions (kg)</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">cloud</span><span class="smas-stat-label">CO&#x2082; Emissions (kg)</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Minor Collisions</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">fender_minor</span><span class="smas-stat-label">Minor Collisions</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Major Collisions</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">car_crash</span><span class="smas-stat-label">Major Collisions</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Total Idling</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">timer</span><span class="smas-stat-label">Total Idling</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Speeding Events</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">report</span><span class="smas-stat-label">Speeding Events</span></div>
         <span class="smas-stat-value">--</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-label">Low Battery</span>
+        <div class="smas-stat-header"><span class="material-symbols-rounded smas-stat-icon">battery_alert</span><span class="smas-stat-label">Low Battery</span></div>
         <span class="smas-stat-value">--</span>
       </div>
     </div>
 
-    <div class="smas-tbl-heading">Vehicle Summary <span id="vehicleHeadingCount" class="smas-tbl-heading-count">showing 0 vehicles</span></div>
+    <div class="smas-tbl-header">
+      <div class="smas-tbl-heading">Vehicle Summary <span id="vehicleHeadingCount" class="smas-tbl-heading-count">showing 0 vehicles</span></div>
+      <div class="smas-pagination" id="vehiclePagination">
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
+        <span class="smas-pg-info" id="vehiclePageInfo">Page 1 of 1</span>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
+        <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleShowAll" onclick="vehicleToggleAll()">Show All</button>
+      </div>
+    </div>
     <div class="smas-tbl-wrap">
       <table class="smas-tbl">
         <thead>
@@ -182,18 +201,20 @@
         <tbody id="vehicleTbody"></tbody>
       </table>
     </div>
-    <div class="smas-pagination" id="vehiclePagination">
-      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
-      <span class="smas-pg-info" id="vehiclePageInfo">Page 1 of 1</span>
-      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
-      <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleShowAll" onclick="vehicleToggleAll()">Show All</button>
-    </div>
 
     <details class="smas-trip-detail">
       <summary>
         <span>Trip Detail &nbsp;<span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span></span>
         <span class="material-symbols-rounded trip-chevron">expand_more</span>
       </summary>
+      <div class="smas-trip-header">
+        <div class="smas-pagination" id="tripPagination">
+          <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
+          <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
+          <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
+          <button class="smas-btn smas-btn--text smas-pg-btn" id="tripShowAll" onclick="tripToggleAll()">Show All</button>
+        </div>
+      </div>
       <div class="smas-trip-tbl-wrap">
         <table class="smas-trip-tbl">
           <thead>
@@ -214,24 +235,7 @@
           <tbody id="tripTbody"></tbody>
         </table>
       </div>
-      <div class="smas-pagination" id="tripPagination">
-        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
-        <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
-        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
-        <button class="smas-btn smas-btn--text smas-pg-btn" id="tripShowAll" onclick="tripToggleAll()">Show All</button>
-      </div>
     </details>
-
-    <div class="smas-preview-footer">
-      <button class="smas-btn smas-btn--secondary" onclick="goBack()">
-        <span class="material-symbols-rounded">arrow_back</span>
-        Back to Config
-      </button>
-      <button class="smas-btn smas-btn--primary" onclick="downloadExcel()">
-        <span class="material-symbols-rounded">download</span>
-        Download Excel
-      </button>
-    </div>
 
   </div>
 </div>
