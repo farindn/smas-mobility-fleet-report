@@ -55,16 +55,15 @@ The add-in runs entirely in the browser — no server required. All API calls, a
 
 - A MyGeotab account with **Administrator** access (required to upload add-ins)
 - Vehicles must have trip data and diagnostics enabled
-- Python 3 — *only* if you are building the ZIP from source (not needed if you already have `smas-mobility-fleet-report.zip`)
 
 ---
 
 ## Project Structure
 
 ```
-smas-mobility-fleet-report/
+addin-smas-mobility-fleet-report/
 ├── index.html                  # Add-in entry point
-├── build_zip.py                # Build script — produces dist/smas-mobility-fleet-report.zip
+├── build_zip.py                # Build script (maintainer use) — produces dist/smas-mobility-fleet-report.zip
 ├── mockup.html                 # Standalone UI mockup (development)
 ├── images/
 │   └── icon.svg                # Add-in menu icon
@@ -79,32 +78,11 @@ smas-mobility-fleet-report/
 
 ---
 
-## Setup: Install in MyGeotab
+## Installation
 
-> **Already have the ZIP?** Skip to *Step 2 — Upload*. Step 1 is only for building from source.
+### Step 1 — Download the add-in
 
-### Step 1 — Build the ZIP (source only)
-
-```bash
-python build_zip.py
-```
-
-This produces `dist/smas-mobility-fleet-report.zip` containing:
-
-```
-smas-mobility-fleet-report.zip
-├── configuration.json
-└── SMAS Mobility Fleet Report/
-    ├── index.html
-    ├── main.js
-    ├── main.css
-    └── icon.svg
-```
-
-The build script automatically:
-- Embeds the icon as a base64 data URI in `configuration.json`
-- Rewrites HTML asset paths to match the flat folder structure
-- Sets `category: "ReportsId"` so the add-in lands under the **Reports** menu (edit `build_zip.py` to change this — see [MyGeotab category values](https://docs.google.com/document/d/1zWboQArdttoMrVwNILe4vTh0hEKiBgI8Ch2vEcshlYE/edit))
+Download `smas-mobility-fleet-report.zip` from the [latest release](../../releases/latest).
 
 ### Step 2 — Upload to MyGeotab
 
@@ -119,10 +97,10 @@ The add-in now appears under **Reports → SMAS Mobility Fleet Report** in the l
 
 ### Updating to a new version
 
-1. Build a new ZIP (`python build_zip.py`) or obtain the updated ZIP file
+1. Download the new ZIP from the [releases page](../../releases)
 2. In MyGeotab, go to **Administration → System → System Settings → Add-Ins**
 3. Click the existing **SMAS Mobility Fleet Report** entry → **Remove**
-4. Click **New Add-In** and upload the updated ZIP
+4. Click **New Add-In** and upload the new ZIP
 5. **OK** → **Save** → Refresh
 
 ### Uninstalling
@@ -151,7 +129,7 @@ The add-in now appears under **Reports → SMAS Mobility Fleet Report** in the l
 
 The original Python notebook is still available for ad-hoc runs:
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/farindn/smas-mobility-fleet-report/blob/main/smas_mobility_fleet_report.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/farindn/addin-smas-mobility-fleet-report/blob/main/smas_mobility_fleet_report.ipynb)
 
 1. Open the notebook in Google Colab using the badge above
 2. Fill in your MyGeotab credentials
@@ -208,13 +186,3 @@ The original Python notebook is still available for ad-hoc runs:
 - **Rate limiting** — API calls are batched with delays to avoid throttling. Report generation may take 1–2 minutes for large fleets.
 - **Fill-up volume** — only available if fill-up detection is configured for the vehicles.
 - **Fuel type detection** — based on `EngineType` diagnostic; defaults to petrol if unavailable.
-
----
-
-## Credits
-
-- Developed by Farin Nugraha, Solutions Engineering SEA, Geotab
-- UI design follows the MyGeotab design system (MYG tokens)
-- Excel generation powered by [ExcelJS](https://github.com/exceljs/exceljs)
-
----
