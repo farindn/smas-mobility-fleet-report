@@ -97,11 +97,6 @@ body {
   letter-spacing: 0;
   color: var(--g-text-primary);
 }
-.smas-page-version {
-  font-size: 12px;
-  color: var(--g-text-secondary);
-  margin-top: 4px;
-}
 
 /* Add-In pill (like MYG Beta badge) */
 .smas-addin-pill {
