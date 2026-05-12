@@ -441,10 +441,10 @@ select.smas-field-input {
   background: var(--g-borders-general);
 }
 .smas-tbl-heading-count {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--g-text-secondary);
-  margin-left: 8px;
+  padding: 0 var(--sp-2);
 }
 .smas-tbl-header .smas-pagination {
   align-self: flex-end;

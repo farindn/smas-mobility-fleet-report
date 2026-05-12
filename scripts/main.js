@@ -273,7 +273,6 @@
   // Pagination
   var PAGE_SIZE = 50;
   var vehicleCurrentPage = 1;
-  var vehicleShowAllFlag = false;
 
   function vehiclePage(delta) {
     var rows = document.querySelectorAll('#vehicleTbody tr');
@@ -283,19 +282,12 @@
   }
   window.vehiclePage = vehiclePage;
 
-  function vehicleToggleAll() {
-    vehicleShowAllFlag = !vehicleShowAllFlag;
-    vehicleCurrentPage = 1;
-    renderVehicleTable();
-  }
-  window.vehicleToggleAll = vehicleToggleAll;
-
   function renderVehicleTable() {
     var rows = Array.from(document.querySelectorAll('#vehicleTbody tr'));
     var total = rows.length;
     var totalPages = Math.ceil(total / PAGE_SIZE) || 1;
-    var start = vehicleShowAllFlag ? 0 : (vehicleCurrentPage - 1) * PAGE_SIZE;
-    var end   = vehicleShowAllFlag ? total : Math.min(start + PAGE_SIZE, total);
+    var start = (vehicleCurrentPage - 1) * PAGE_SIZE;
+    var end   = Math.min(start + PAGE_SIZE, total);
 
     rows.forEach(function (r, i) {
       r.style.display = (i >= start && i < end) ? '' : 'none';
@@ -304,23 +296,16 @@
     var pageInfo = document.getElementById('vehiclePageInfo');
     var prevBtn  = document.getElementById('vehiclePrev');
     var nextBtn  = document.getElementById('vehicleNext');
-    var showBtn  = document.getElementById('vehicleShowAll');
     var heading  = document.getElementById('vehicleHeadingCount');
 
-    if (pageInfo) pageInfo.textContent = vehicleShowAllFlag ? ('Showing all ' + total) : ('Page ' + vehicleCurrentPage + ' of ' + totalPages);
-    if (prevBtn)  prevBtn.disabled = vehicleShowAllFlag || vehicleCurrentPage === 1;
-    if (nextBtn)  nextBtn.disabled = vehicleShowAllFlag || vehicleCurrentPage === totalPages;
-    if (showBtn)  showBtn.textContent = vehicleShowAllFlag ? 'Paginate' : 'Show All';
-
-    var rangeText = vehicleShowAllFlag
-      ? ('showing all ' + total + ' vehicles')
-      : ('showing ' + (start + 1) + '–' + end + ' of ' + total + ' vehicles');
-    if (heading) heading.textContent = rangeText;
+    if (pageInfo) pageInfo.textContent = 'Page ' + vehicleCurrentPage + ' of ' + totalPages;
+    if (prevBtn)  prevBtn.disabled = vehicleCurrentPage === 1;
+    if (nextBtn)  nextBtn.disabled = vehicleCurrentPage === totalPages;
+    if (heading)  heading.textContent = 'showing ' + (start + 1) + '–' + end + ' of ' + total + ' vehicles';
   }
   window.renderVehicleTable = renderVehicleTable;
 
   var tripCurrentPage = 1;
-  var tripShowAllFlag = false;
 
   function tripPage(delta) {
     var rows = document.querySelectorAll('#tripTbody tr');
@@ -330,19 +315,12 @@
   }
   window.tripPage = tripPage;
 
-  function tripToggleAll() {
-    tripShowAllFlag = !tripShowAllFlag;
-    tripCurrentPage = 1;
-    renderTripTable();
-  }
-  window.tripToggleAll = tripToggleAll;
-
   function renderTripTable() {
     var rows = Array.from(document.querySelectorAll('#tripTbody tr'));
     var total = rows.length;
     var totalPages = Math.ceil(total / PAGE_SIZE) || 1;
-    var start = tripShowAllFlag ? 0 : (tripCurrentPage - 1) * PAGE_SIZE;
-    var end   = tripShowAllFlag ? total : Math.min(start + PAGE_SIZE, total);
+    var start = (tripCurrentPage - 1) * PAGE_SIZE;
+    var end   = Math.min(start + PAGE_SIZE, total);
 
     rows.forEach(function (r, i) {
       r.style.display = (i >= start && i < end) ? '' : 'none';
@@ -351,18 +329,12 @@
     var pageInfo = document.getElementById('tripPageInfo');
     var prevBtn  = document.getElementById('tripPrev');
     var nextBtn  = document.getElementById('tripNext');
-    var showBtn  = document.getElementById('tripShowAll');
     var heading  = document.getElementById('tripHeadingCount');
 
-    if (pageInfo) pageInfo.textContent = tripShowAllFlag ? ('Showing all ' + total) : ('Page ' + tripCurrentPage + ' of ' + totalPages);
-    if (prevBtn)  prevBtn.disabled = tripShowAllFlag || tripCurrentPage === 1;
-    if (nextBtn)  nextBtn.disabled = tripShowAllFlag || tripCurrentPage === totalPages;
-    if (showBtn)  showBtn.textContent = tripShowAllFlag ? 'Paginate' : 'Show All';
-
-    var rangeText = tripShowAllFlag
-      ? ('showing all ' + total + ' trips')
-      : ('showing ' + (start + 1) + '–' + end + ' of ' + total + ' trips');
-    if (heading) heading.textContent = rangeText;
+    if (pageInfo) pageInfo.textContent = 'Page ' + tripCurrentPage + ' of ' + totalPages;
+    if (prevBtn)  prevBtn.disabled = tripCurrentPage === 1;
+    if (nextBtn)  nextBtn.disabled = tripCurrentPage === totalPages;
+    if (heading)  heading.textContent = 'showing ' + (start + 1) + '–' + end + ' of ' + total + ' trips';
   }
   window.renderTripTable = renderTripTable;
 
@@ -958,9 +930,7 @@
       }
 
       vehicleCurrentPage = 1;
-      vehicleShowAllFlag = false;
       tripCurrentPage = 1;
-      tripShowAllFlag = false;
       renderVehicleTable();
       renderTripTable();
     }
