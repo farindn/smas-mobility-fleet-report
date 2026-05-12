@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SMAS Mobility Fleet Report</title>
 
+  <!-- No external font/icon dependencies: icons are inline SVG (see scripts/main.js setupIcons), avoiding MyGeotab iframe CSP issues -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" />
   <link rel="stylesheet" href="styles/main.css" />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -167,8 +167,9 @@
     </div>
 
     <div class="smas-tbl-header">
-      <div class="smas-tbl-heading">Vehicle Summary <span id="vehicleHeadingCount" class="smas-tbl-heading-count">showing 0 vehicles</span></div>
+      <div class="smas-tbl-heading">Vehicle Summary</div>
       <div class="smas-pagination" id="vehiclePagination">
+        <span id="vehicleHeadingCount" class="smas-tbl-heading-count">showing 0 vehicles</span>
         <button class="smas-btn smas-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
         <span class="smas-pg-info" id="vehiclePageInfo">Page 1 of 1</span>
         <button class="smas-btn smas-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>
@@ -204,11 +205,12 @@
 
     <details class="smas-trip-detail">
       <summary>
-        <span>Trip Detail &nbsp;<span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span></span>
+        <span>Trip Detail</span>
         <span class="material-symbols-rounded trip-chevron">expand_more</span>
       </summary>
       <div class="smas-trip-header">
         <div class="smas-pagination" id="tripPagination">
+          <span id="tripHeadingCount" class="smas-tbl-heading-count">showing 0 trips</span>
           <button class="smas-btn smas-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)"><span class="material-symbols-rounded">chevron_left</span>Prev</button>
           <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
           <button class="smas-btn smas-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next<span class="material-symbols-rounded">chevron_right</span></button>

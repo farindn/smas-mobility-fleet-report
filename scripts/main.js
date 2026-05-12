@@ -6,6 +6,141 @@
   'use strict';
 
   // ══════════════════════════════════════════════════════════════
+  // INLINE SVG ICONS (avoids Google Fonts CSP issues in MyGeotab iframe)
+  // Same approach as the Import KML add-in.
+  // ══════════════════════════════════════════════════════════════
+
+  var ICONS = {
+    'check_circle':       '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>',
+    'extension':          '<path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-1.99.9-1.99 2v3.8H3.5c1.49 0 2.7 1.21 2.7 2.7s-1.21 2.7-2.7 2.7H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.49 1.21-2.7 2.7-2.7s2.7 1.21 2.7 2.7V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/>',
+    'info':               '<path d="M11 7h2v2h-2zm0 4h2v6h-2zm1-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>',
+    'play_arrow':         '<path d="M8 5v14l11-7z"/>',
+    'arrow_back':         '<path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>',
+    'download':           '<path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>',
+    'chevron_left':       '<path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>',
+    'chevron_right':      '<path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>',
+    'expand_more':        '<path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>',
+    'close':              '<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>',
+    'directions_car':     '<path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/>',
+    'inventory_2':        '<path d="M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4l16-.02V7z"/>',
+    'groups':             '<path d="M12 12.75c1.63 0 3.07.39 4.24.9 1.08.48 1.76 1.56 1.76 2.73L18 18H6v-1.61c0-1.18.68-2.26 1.76-2.73 1.17-.52 2.61-.91 4.24-.91zM4 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm1.13 1.1c-.37-.06-.74-.1-1.13-.1-.99 0-1.93.21-2.78.58A2.01 2.01 0 0 0 0 16.43V18h4.5v-1.61c0-.83.23-1.61.63-2.29zM20 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4 3.43c0-.81-.48-1.53-1.22-1.85A6.95 6.95 0 0 0 20 14c-.39 0-.76.04-1.13.1.4.68.63 1.46.63 2.29V18H24v-1.57zM12 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"/>',
+    'speed':              '<path d="M20.38 8.57l-1.23 1.85a8 8 0 0 1-.22 7.58H5.07A8 8 0 0 1 15.58 6.85l1.85-1.23A10 10 0 0 0 3.35 19a2 2 0 0 0 1.72 1h13.85a2 2 0 0 0 1.74-1 10 10 0 0 0-.27-10.44zm-9.79 6.84a2 2 0 0 0 2.83 0l5.66-8.49-8.49 5.66a2 2 0 0 0 0 2.83z"/>',
+    'local_gas_station':  '<path d="M19.77 7.23l.01-.01-3.72-3.72L15 4.56l2.11 2.11c-.94.36-1.61 1.26-1.61 2.33 0 1.38 1.12 2.5 2.5 2.5.36 0 .69-.08 1-.21v7.21c0 .55-.45 1-1 1s-1-.45-1-1V14c0-1.1-.9-2-2-2h-1V5c0-1.1-.9-2-2-2H6c-1.1 0-2 .9-2 2v16h10v-7.5h1.5v5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V9c0-.69-.28-1.32-.73-1.77zM12 10H6V5h6v5zm6 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z"/>',
+    'cloud':              '<path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z"/>',
+    'timer':              '<path d="M15 1H9v2h6V1zm-4 13h2V8h-2v6zm8.03-6.61l1.42-1.42c-.43-.51-.9-.99-1.41-1.41l-1.42 1.42C16.07 4.74 14.12 4 12 4c-4.97 0-9 4.03-9 9s4.02 9 9 9 9-4.03 9-9c0-2.12-.74-4.07-1.97-5.61zM12 20c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"/>',
+    'report':             '<path d="M15.73 3H8.27L3 8.27v7.46L8.27 21h7.46L21 15.73V8.27L15.73 3zM12 17.3c-.72 0-1.3-.58-1.3-1.3 0-.72.58-1.3 1.3-1.3.72 0 1.3.58 1.3 1.3 0 .72-.58 1.3-1.3 1.3zm1-4.3h-2V7h2v6z"/>',
+    'battery_alert':      '<path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4zM13 18h-2v-2h2v2zm0-4h-2V9h2v5z"/>',
+    'fender_minor':       '<path d="M19 8h-1V6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v2H5c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h1v3c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-3h6v3c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-3h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zM8 6h8v2H8V6z"/>',
+    'car_crash':          '<path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>',
+    'progress_activity':  '<path d="M12 2v4c3.31 0 6 2.69 6 6h4c0-5.52-4.48-10-10-10z"/>',
+    'radio_button_unchecked': '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>'
+  };
+
+  function buildSvg(name, size) {
+    var inner = ICONS[name];
+    if (!inner) return '';
+    size = size || 20;
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="currentColor" aria-hidden="true">' + inner + '</svg>';
+  }
+  window.buildSvg = buildSvg;
+
+  function setupIcons(root) {
+    root = root || document;
+    var spans = root.querySelectorAll('span.material-symbols-rounded');
+    Array.prototype.forEach.call(spans, function (span) {
+      if (span.querySelector('svg')) return; // already replaced
+      var name = (span.textContent || '').trim();
+      var path = ICONS[name];
+      if (!path) return;
+      var size = 18;
+      if (span.classList.contains('smas-stat-icon')) size = 18;
+      else if (span.classList.contains('trip-chevron')) size = 20;
+      else if (span.parentElement && span.parentElement.classList.contains('smas-info-note')) size = 18;
+      else if (span.parentElement && span.parentElement.tagName === 'BUTTON') size = 18;
+      span.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="' + size + '" height="' + size + '" fill="currentColor" aria-hidden="true">' + path + '</svg>';
+    });
+  }
+  window.setupIcons = setupIcons;
+
+  // ══════════════════════════════════════════════════════════════
+  // ADD-IN PILL POPOVER (description + Send feedback)
+  // ══════════════════════════════════════════════════════════════
+
+  var SUPPORT_EMAIL = 'farinnugraha@geotab.com';
+  var ADDIN_DESCRIPTION = 'This add-in is provided on an "as-is" basis. You assume all risks and costs associated with its use, including any damage to equipment, software, or data. Geotab is not obligated to provide maintenance, technical support, or any other assistance for this tool.';
+
+  function setupAddinPills() {
+    var pills = document.querySelectorAll('.smas-addin-pill');
+    Array.prototype.forEach.call(pills, function (pill) {
+      if (pill.dataset.popoverInit) return;
+      pill.dataset.popoverInit = '1';
+      pill.style.cursor = 'pointer';
+      pill.setAttribute('role', 'button');
+      pill.setAttribute('tabindex', '0');
+
+      pill.addEventListener('click', function (e) {
+        e.stopPropagation();
+        toggleAddinPopover(pill);
+      });
+      pill.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAddinPopover(pill);
+        }
+      });
+    });
+
+    document.addEventListener('click', function (e) {
+      var pop = document.getElementById('smasAddinPopover');
+      if (pop && !pop.contains(e.target) && !e.target.closest('.smas-addin-pill')) {
+        pop.remove();
+      }
+    });
+  }
+
+  function toggleAddinPopover(pill) {
+    var existing = document.getElementById('smasAddinPopover');
+    if (existing) {
+      existing.remove();
+      return;
+    }
+    var subject = encodeURIComponent('SMAS Mobility Fleet Report — Feedback');
+    var body = encodeURIComponent('Hi,\n\n');
+    var mailtoHref = 'mailto:' + SUPPORT_EMAIL + '?subject=' + subject + '&body=' + body;
+
+    var pop = document.createElement('div');
+    pop.id = 'smasAddinPopover';
+    pop.className = 'smas-addin-popover';
+    pop.innerHTML =
+      '<p class="smas-addin-popover__text">' + ADDIN_DESCRIPTION + '</p>' +
+      '<div class="smas-addin-popover__actions">' +
+        '<a href="' + mailtoHref + '" class="smas-btn smas-btn--primary smas-addin-popover__send">Send feedback</a>' +
+        '<button type="button" class="smas-btn smas-btn--secondary smas-addin-popover__close">Close</button>' +
+      '</div>';
+    document.body.appendChild(pop);
+
+    // Position fixed, clamped to viewport
+    var rect = pill.getBoundingClientRect();
+    var popWidth = 320;
+    var margin = 16;
+    var leftPos = Math.min(rect.left, window.innerWidth - popWidth - margin);
+    leftPos = Math.max(margin, leftPos);
+
+    pop.style.position = 'fixed';
+    pop.style.top = (rect.bottom + 8) + 'px';
+    pop.style.left = leftPos + 'px';
+
+    pop.querySelector('.smas-addin-popover__send').addEventListener('click', function () {
+      // Let the browser handle the mailto: anchor; just close the popover.
+      setTimeout(function () { pop.remove(); }, 0);
+    });
+    pop.querySelector('.smas-addin-popover__close').addEventListener('click', function () {
+      pop.remove();
+    });
+  }
+  window.setupAddinPills = setupAddinPills;
+
+  // ══════════════════════════════════════════════════════════════
   // UI HELPERS (run immediately — available before geotab.addin)
   // ══════════════════════════════════════════════════════════════
 
@@ -34,6 +169,7 @@
       renderVehicleTable();
       renderTripTable();
     }
+    setupIcons();
   }
   window.showScreen = showScreen;
 
@@ -225,6 +361,18 @@
     if (heading) heading.textContent = rangeText;
   }
   window.renderTripTable = renderTripTable;
+
+  // Initial icon + popover wiring (runs immediately for mockup mode and
+  // before the live add-in focus lifecycle fires)
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      setupIcons();
+      setupAddinPills();
+    });
+  } else {
+    setupIcons();
+    setupAddinPills();
+  }
 
 
   // ══════════════════════════════════════════════════════════════
@@ -746,23 +894,30 @@
       });
 
       var stats = [
-        { label: 'Total Vehicles', value: fmtNum(totalVehicles) },
-        { label: 'Archived (in Period)', value: fmtNum(data.archivedCount) },
-        { label: 'Total Customers', value: fmtNum(totalCustomers) },
-        { label: 'Max Speed (km/h)', value: fmtNum(maxSpeed, 1) },
-        { label: 'Fuel Consumed (L)', value: fmtNum(totalFuel) },
-        { label: 'CO₂ Emissions (kg)', value: fmtNum(totalCo2) },
-        { label: 'Minor Collisions', value: fmtNum(totalMinor) },
-        { label: 'Major Collisions', value: fmtNum(totalMajor), warn: totalMajor > 0 },
-        { label: 'Total Idling', value: fmtDuration(totalIdleSec) },
-        { label: 'Speeding Events', value: fmtNum(totalSpeed) },
-        { label: 'Low Battery', value: fmtNum(lowBatt), warn: lowBatt > 0 },
+        { icon: 'directions_car',    label: 'Total Vehicles', value: fmtNum(totalVehicles) },
+        { icon: 'inventory_2',       label: 'Archived (in Period)', value: fmtNum(data.archivedCount) },
+        { icon: 'groups',            label: 'Total Customers', value: fmtNum(totalCustomers) },
+        { icon: 'speed',             label: 'Max Speed (km/h)', value: fmtNum(maxSpeed, 1) },
+        { icon: 'local_gas_station', label: 'Fuel Consumed (L)', value: fmtNum(totalFuel) },
+        { icon: 'cloud',             label: 'CO₂ Emissions (kg)', value: fmtNum(totalCo2) },
+        { icon: 'fender_minor',      label: 'Minor Collisions', value: fmtNum(totalMinor) },
+        { icon: 'car_crash',         label: 'Major Collisions', value: fmtNum(totalMajor), warn: totalMajor > 0 },
+        { icon: 'timer',             label: 'Total Idling', value: fmtDuration(totalIdleSec) },
+        { icon: 'report',            label: 'Speeding Events', value: fmtNum(totalSpeed) },
+        { icon: 'battery_alert',     label: 'Low Battery', value: fmtNum(lowBatt), warn: lowBatt > 0 },
       ];
       var statBar = document.querySelector('.smas-stat-bar');
       if (statBar) {
         statBar.innerHTML = stats.map(function (s) {
-          return '<div class="smas-stat"><span class="smas-stat-value' + (s.warn ? ' warn' : '') + '">' + s.value + '</span><span class="smas-stat-label">' + s.label + '</span></div>';
+          return '<div class="smas-stat">'
+            + '<div class="smas-stat-header">'
+            + '<span class="material-symbols-rounded smas-stat-icon">' + s.icon + '</span>'
+            + '<span class="smas-stat-label">' + s.label + '</span>'
+            + '</div>'
+            + '<span class="smas-stat-value' + (s.warn ? ' warn' : '') + '">' + s.value + '</span>'
+            + '</div>';
         }).join('');
+        if (typeof setupIcons === 'function') setupIcons(statBar);
       }
 
       var vTbody = document.getElementById('vehicleTbody');
@@ -773,7 +928,7 @@
           var majCls = (+r['Major Collisions'] > 0) ? 'num warn' : 'num';
           var fillVol = r['Fill-up Volume (L)'] === 'N/A' ? '<td class="num na">N/A</td>' : '<td class="num">' + fmtNum(r['Fill-up Volume (L)']) + '</td>';
           return '<tr><td>' + (i + 1) + '</td><td>' + escapeHtml(r['Vehicle Name']) + '</td><td>' + escapeHtml(r['Customer']) + '</td>'
-            + '<td style="font-family:monospace;font-size:12px">' + escapeHtml(r['VIN']) + '</td><td>' + escapeHtml(r['Serial No.']) + '</td>'
+            + '<td>' + escapeHtml(r['VIN']) + '</td><td>' + escapeHtml(r['Serial No.']) + '</td>'
             + '<td class="num">' + (r['Odometer (km)'] === 'N/A' ? '<span class="na">N/A</span>' : fmtNum(r['Odometer (km)'])) + '</td>'
             + '<td class="num">' + fmtNum(r['Fill-up Count']) + '</td>' + fillVol
             + '<td class="num">' + (r['Fuel Consumed (L)'] === 'N/A' ? '<span class="na">N/A</span>' : fmtNum(r['Fuel Consumed (L)'], 1)) + '</td>'
@@ -790,7 +945,7 @@
       if (tTbody) {
         tTbody.innerHTML = data.tripRows.slice(0, 500).map(function (r) {
           return '<tr><td>' + escapeHtml(r['Vehicle Name']) + '</td><td>' + escapeHtml(r['Customer']) + '</td>'
-            + '<td style="font-family:monospace;font-size:12px">' + escapeHtml(r['VIN']) + '</td>'
+            + '<td>' + escapeHtml(r['VIN']) + '</td>'
             + '<td>' + escapeHtml(r['Trip Start']) + '</td><td>' + escapeHtml(r['Trip End']) + '</td>'
             + '<td>' + escapeHtml(r['Duration']) + '</td><td class="num">' + fmtNum(r['Distance (km)'], 2) + '</td>'
             + '<td class="num">' + fmtNum(r['Avg Speed (km/h)'], 1) + '</td><td class="num">' + fmtNum(r['Max Speed (km/h)'], 1) + '</td>'
@@ -947,6 +1102,8 @@
         state = state_;
         var container = document.getElementById('smasMobilityFleetReport');
         if (container) container.style.display = 'block';
+        if (typeof setupIcons === 'function') setupIcons();
+        if (typeof setupAddinPills === 'function') setupAddinPills();
         loadCustomerDropdown().catch(function (e) { console.warn('Failed to load customer dropdown:', e); });
       },
       blur: function () {
