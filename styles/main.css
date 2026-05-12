@@ -47,7 +47,7 @@ body {
 .screen.active { display: block; }
 
 /* ── Layout wrapper ────────────────────────────────────── */
-.smas-wrap { padding: 20px 24px; max-width: 900px; }
+.smas-wrap { padding: 20px 24px; }
 
 /* ── Disclaimer banner ─────────────────────────────────── */
 .smas-disclaimer {
@@ -458,13 +458,13 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
 /* ── Toast ─────────────────────────────────────────────── */
 #toast {
   position: fixed;
-  top: 20px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   background: #1f2833;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 14px 28px;
+  border-radius: 8px;
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -474,14 +474,13 @@ details.smas-trip-detail[open] .trip-chevron { transform: rotate(180deg); }
   pointer-events: none;
   transition: opacity 0.3s;
   white-space: nowrap;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.25);
 }
 #toast.visible { opacity: 1; pointer-events: auto; }
 #toast svg { color: #4cca6e; flex-shrink: 0; }
 
 /* ── Tablet (<=768px) ──────────────────────────────────── */
 @media (max-width: 768px) {
-  .smas-wrap { max-width: 100%; }
   .smas-field-row { flex-wrap: wrap; }
   .smas-stat-bar { grid-template-columns: repeat(3, 1fr); }
   .smas-stat:nth-child(4n)  { border-right: 1px solid var(--color-border); }
