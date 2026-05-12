@@ -313,7 +313,7 @@ select.smas-field-input {
 @keyframes spin { to { transform: rotate(360deg); } }
 .smas-gen-title {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 400;
   color: var(--g-text-primary);
   margin-bottom: var(--sp-1);
 }

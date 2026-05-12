@@ -104,17 +104,13 @@
       existing.remove();
       return;
     }
-    var subject = encodeURIComponent('SMAS Mobility Fleet Report — Feedback');
-    var body = encodeURIComponent('Hi,\n\n');
-    var mailtoHref = 'mailto:' + SUPPORT_EMAIL + '?subject=' + subject + '&body=' + body;
-
     var pop = document.createElement('div');
     pop.id = 'smasAddinPopover';
     pop.className = 'smas-addin-popover';
     pop.innerHTML =
       '<p class="smas-addin-popover__text">' + ADDIN_DESCRIPTION + '</p>' +
       '<div class="smas-addin-popover__actions">' +
-        '<a href="' + mailtoHref + '" class="smas-btn smas-btn--primary smas-addin-popover__send">Send feedback</a>' +
+        '<button type="button" class="smas-btn smas-btn--primary smas-addin-popover__send">Send feedback</button>' +
         '<button type="button" class="smas-btn smas-btn--secondary smas-addin-popover__close">Close</button>' +
       '</div>';
     document.body.appendChild(pop);
@@ -131,8 +127,16 @@
     pop.style.left = leftPos + 'px';
 
     pop.querySelector('.smas-addin-popover__send').addEventListener('click', function () {
-      // Let the browser handle the mailto: anchor; just close the popover.
-      setTimeout(function () { pop.remove(); }, 0);
+      navigator.clipboard.writeText(SUPPORT_EMAIL).then(function () {
+        var toast = document.getElementById('toast');
+        if (toast) {
+          toast.innerHTML = '<span class="material-symbols-rounded">check_circle</span>Email copied to clipboard.';
+          setupIcons(toast);
+          toast.classList.add('visible');
+          setTimeout(function () { toast.classList.remove('visible'); }, 2500);
+        }
+        pop.remove();
+      });
     });
     pop.querySelector('.smas-addin-popover__close').addEventListener('click', function () {
       pop.remove();
