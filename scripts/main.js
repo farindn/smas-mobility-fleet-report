@@ -358,7 +358,7 @@
   window.geotab = window.geotab || {};
   window.geotab.addin = window.geotab.addin || {};
 
-  geotab.addin.smasMobilityFleetReport = function () {
+  geotab.addin["SMAS Mobility Fleet Report"] = function () {
     var api = null;
     var state = null;
     var groupMap = {};
@@ -1074,14 +1074,14 @@
       focus: function (api_, state_) {
         api = api_;
         state = state_;
-        var container = document.getElementById('smasMobilityFleetReport');
+        var container = document.getElementById('SMAS Mobility Fleet Report');
         if (container) container.style.display = 'block';
         if (typeof setupIcons === 'function') setupIcons();
         if (typeof setupAddinPills === 'function') setupAddinPills();
         loadCustomerDropdown().catch(function (e) { console.warn('Failed to load customer dropdown:', e); });
       },
       blur: function () {
-        var container = document.getElementById('smasMobilityFleetReport');
+        var container = document.getElementById('SMAS Mobility Fleet Report');
         if (container) container.style.display = 'none';
       },
     };

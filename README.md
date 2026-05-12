@@ -82,7 +82,7 @@ smas-mobility-fleet-report/
 
 ```json
 {
-  "name": "smasMobilityFleetReport",
+  "name": "SMAS Mobility Fleet Report",
   "version": "1.0.0",
   "supportEmail": "farinnugraha@geotab.com",
   "items": [{
