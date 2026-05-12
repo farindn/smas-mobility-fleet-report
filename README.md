@@ -82,7 +82,7 @@ addin-smas-mobility-fleet-report/
 
 ### Step 1 — Download the add-in
 
-[**Download smas-mobility-fleet-report.zip**](releases/smas-mobility-fleet-report.zip?raw=true)
+Go to the [**releases folder**](https://github.com/farindn/addin-smas-mobility-fleet-report/tree/main/releases) and download `smas-mobility-fleet-report.zip`.
 
 ### Step 2 — Upload to MyGeotab
 
@@ -97,7 +97,7 @@ The add-in now appears under **Reports → SMAS Mobility Fleet Report** in the l
 
 ### Updating to a new version
 
-1. [Download the latest ZIP](releases/smas-mobility-fleet-report.zip?raw=true)
+1. Go to the [releases folder](https://github.com/farindn/addin-smas-mobility-fleet-report/tree/main/releases) and download the latest `smas-mobility-fleet-report.zip`
 2. In MyGeotab, go to **Administration → System → System Settings → Add-Ins**
 3. Click the existing **SMAS Mobility Fleet Report** entry → **Remove**
 4. Click **New Add-In** and upload the new ZIP
