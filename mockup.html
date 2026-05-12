@@ -182,31 +182,6 @@
     }
     .smas-info-note svg { flex-shrink: 0; margin-top: 1px; color: var(--color-primary); }
 
-    /* ── Advanced collapsible ────────────────────────────────── */
-    details.smas-advanced { margin-top: var(--sp-4); }
-    details.smas-advanced > summary {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--color-secondary);
-      list-style: none;
-      user-select: none;
-      padding: var(--sp-2) 0;
-    }
-    details.smas-advanced > summary::-webkit-details-marker { display: none; }
-    .adv-chevron { transition: transform 0.2s; flex-shrink: 0; }
-    details.smas-advanced[open] .adv-chevron { transform: rotate(180deg); }
-    .adv-body { padding: var(--sp-3) 0 0; }
-    .smas-grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--sp-4);
-      margin-top: var(--sp-3);
-    }
-
     /* ── Buttons ─────────────────────────────────────────────── */
     .kml-btn {
       display: inline-flex;
@@ -307,26 +282,28 @@
       flex-wrap: wrap;
     }
     .smas-preview-title { font-size: 22px; font-weight: 600; color: var(--color-text); }
-    .smas-preview-actions { display: flex; gap: var(--sp-2); align-items: center; }
 
-    /* Stat bar */
+    /* Stat bar — 4-col grid on desktop */
     .smas-stat-bar {
-      display: flex;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       border: 1px solid var(--color-border);
-      border-radius: 6px;
+      border-radius: 8px;
       overflow: hidden;
       margin-bottom: var(--sp-5);
     }
     .smas-stat {
-      flex: 1;
-      padding: var(--sp-4) var(--sp-5);
+      padding: 14px 16px;
       text-align: center;
       border-right: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
     }
-    .smas-stat:last-child { border-right: none; }
+    .smas-stat:nth-child(4n)   { border-right: none; }
+    .smas-stat:nth-child(n+9)  { border-bottom: none; }
+    .smas-stat:nth-child(11)   { border-right: none; }
     .smas-stat-value {
       display: block;
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 700;
       color: var(--color-text);
       line-height: 1.1;
@@ -392,6 +369,30 @@
       color: var(--color-batt-low-text) !important;
       font-weight: 700;
     }
+    .smas-tbl td.warn {
+      background: var(--color-batt-low-bg) !important;
+      color: var(--color-batt-low-text) !important;
+      font-weight: 700;
+    }
+
+    /* Pagination controls */
+    .smas-pagination {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      padding: var(--sp-3) 0 var(--sp-2);
+      justify-content: flex-end;
+    }
+    .smas-pg-info {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      padding: 0 var(--sp-2);
+    }
+    .smas-pg-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
 
     /* Trip detail collapsible */
     details.smas-trip-detail {
@@ -456,6 +457,7 @@
       display: flex;
       justify-content: flex-end;
       gap: var(--sp-3);
+      flex-wrap: wrap;
     }
 
     /* ── Toast ───────────────────────────────────────────────── */
@@ -482,19 +484,39 @@
     #toast.visible { opacity: 1; pointer-events: auto; }
     #toast svg { color: #4cca6e; flex-shrink: 0; }
 
+    /* ── Tablet (≤768px) ─────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .smas-wrap { max-width: 100%; }
+      .smas-field-row { flex-wrap: wrap; }
+      .smas-stat-bar { grid-template-columns: repeat(3, 1fr); }
+      .smas-stat:nth-child(4n)  { border-right: 1px solid var(--color-border); }
+      .smas-stat:nth-child(3n)  { border-right: none; }
+      .smas-stat:nth-child(n+9) { border-bottom: 1px solid var(--color-border); }
+      .smas-stat:nth-child(n+10) { border-bottom: none; }
+      .smas-stat:nth-child(11)  { border-right: none; }
+    }
+
     /* ── Mobile (≤480px) ─────────────────────────────────────── */
     @media (max-width: 480px) {
       .smas-wrap { padding: 14px 16px; }
       .smas-field-row { flex-direction: column; gap: var(--sp-2); }
-      .smas-grid-3 { grid-template-columns: 1fr; }
       .btn-generate { width: 100%; }
       .smas-preview-header { flex-direction: column; align-items: flex-start; }
-      .smas-preview-actions { width: 100%; }
-      .smas-preview-actions .kml-btn { flex: 1; }
-      .smas-stat { padding: var(--sp-3) var(--sp-2); }
-      .smas-stat-value { font-size: 22px; }
+      .smas-stat-bar { grid-template-columns: repeat(2, 1fr); }
+      .smas-stat {
+        border-right: 1px solid var(--color-border);
+        border-bottom: 1px solid var(--color-border);
+        padding: var(--sp-3) var(--sp-2);
+      }
+      .smas-stat:nth-child(3n)  { border-right: 1px solid var(--color-border); }
+      .smas-stat:nth-child(2n)  { border-right: none; }
+      .smas-stat:nth-child(n+10) { border-bottom: 1px solid var(--color-border); }
+      .smas-stat:nth-child(n+11) { border-bottom: none; }
+      .smas-stat:last-child { border-right: none; }
+      .smas-stat-value { font-size: 18px; }
       .smas-preview-footer { flex-direction: column-reverse; }
       .smas-preview-footer .kml-btn { width: 100%; }
+      .smas-pagination { justify-content: center; flex-wrap: wrap; }
     }
   </style>
 </head>
@@ -574,32 +596,6 @@
         <span>Fuel type is auto-detected per vehicle from engine diagnostics — no manual selection needed. CO2 factor is applied per vehicle accordingly.</span>
       </div>
 
-      <!-- Advanced collapsible -->
-      <details class="smas-advanced">
-        <summary>
-          <svg class="adv-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-            <path d="M7 10l5 5 5-5z"/>
-          </svg>
-          Advanced — Rule Name Overrides
-        </summary>
-        <div class="adv-body">
-          <span class="smas-field-helper">Only change these if your MyGeotab database uses non-standard rule names. The report searches for rules whose name contains the keyword below.</span>
-          <div class="smas-grid-3">
-            <div class="smas-field">
-              <label class="smas-field-label" for="ruleCollision">Collision keyword</label>
-              <input class="smas-field-input" type="text" id="ruleCollision" value="collision" />
-            </div>
-            <div class="smas-field">
-              <label class="smas-field-label" for="ruleFillup">Fill-up keyword</label>
-              <input class="smas-field-input" type="text" id="ruleFillup" value="fill" />
-            </div>
-            <div class="smas-field">
-              <label class="smas-field-label" for="ruleSpeeding">Speeding keyword</label>
-              <input class="smas-field-input" type="text" id="ruleSpeeding" value="speed" />
-            </div>
-          </div>
-        </div>
-      </details>
     </div>
 
     <!-- Generate button -->
@@ -638,128 +634,152 @@
     <!-- Header row -->
     <div class="smas-preview-header">
       <h1 class="smas-preview-title">Report Preview</h1>
-      <div class="smas-preview-actions">
-        <button class="kml-btn kml-btn--text" onclick="goBack()">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-          </svg>
-          Back to Config
-        </button>
-        <button class="kml-btn kml-btn--primary" onclick="downloadExcel()">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-          </svg>
-          Download Excel
-        </button>
-      </div>
     </div>
 
     <!-- Stat bar -->
     <div class="smas-stat-bar">
       <div class="smas-stat">
-        <span class="smas-stat-value">42</span>
-        <span class="smas-stat-label">Vehicles</span>
+        <span class="smas-stat-value">923</span>
+        <span class="smas-stat-label">Total Vehicles</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value">1,247</span>
-        <span class="smas-stat-label">Trips in Period</span>
+        <span class="smas-stat-value">7</span>
+        <span class="smas-stat-label">Archived (in Period)</span>
       </div>
       <div class="smas-stat">
-        <span class="smas-stat-value warn">3</span>
-        <span class="smas-stat-label">Low Battery Alerts</span>
+        <span class="smas-stat-value">47</span>
+        <span class="smas-stat-label">Total Customers</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">181</span>
+        <span class="smas-stat-label">Max Speed (km/h)</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">34,124</span>
+        <span class="smas-stat-label">Fuel Consumed (L)</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">78,826</span>
+        <span class="smas-stat-label">CO&#x2082; Emissions (kg)</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">74</span>
+        <span class="smas-stat-label">Minor Collisions</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value warn">1</span>
+        <span class="smas-stat-label">Major Collisions</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">1,284:32:11</span>
+        <span class="smas-stat-label">Total Idling</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">5,097</span>
+        <span class="smas-stat-label">Speeding Events</span>
+      </div>
+      <div class="smas-stat">
+        <span class="smas-stat-value">0</span>
+        <span class="smas-stat-label">Low Battery</span>
       </div>
     </div>
 
     <!-- Vehicle Summary table -->
-    <div class="smas-tbl-heading">Vehicle Summary <span style="font-size:13px;font-weight:400;color:var(--color-text-secondary)">(showing 8 of 42 vehicles)</span></div>
+    <div class="smas-tbl-heading">Vehicle Summary <span id="vehicleHeadingCount" style="font-size:13px;font-weight:400;color:var(--color-text-secondary)">showing 8 of 923 vehicles</span></div>
     <div class="smas-tbl-wrap">
       <table class="smas-tbl">
         <thead>
           <tr>
             <th>#</th>
             <th>Vehicle Name</th>
+            <th>Customer</th>
             <th>VIN</th>
             <th>Serial No.</th>
             <th class="num">Odometer (km)</th>
             <th class="num">Fill-up Count</th>
-            <th class="num">Fill-up Vol (L)</th>
-            <th class="num">Fuel Used (L)</th>
+            <th class="num">Fill-up Volume (L)</th>
+            <th class="num">Fuel Consumed (L)</th>
             <th class="num">Max Speed (km/h)</th>
-            <th class="num">Avg Speed (km/h)</th>
-            <th class="num">CO2 (kg)</th>
-            <th class="num">Collisions</th>
-            <th class="num">Idle Events</th>
+            <th class="num">CO2 Emission (kg)</th>
+            <th class="num">Minor Collisions</th>
+            <th class="num">Major Collisions</th>
+            <th class="num">Idle Event Count</th>
             <th>Total Idling</th>
             <th class="num">Speeding Events</th>
-            <th class="num">Battery (V)</th>
-            <th>Battery Health</th>
+            <th class="num">Battery Voltage (V)</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="vehicleTbody">
           <tr>
-            <td>1</td><td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td><td>GT9000ABCD</td>
+            <td>1</td><td>SMAS-001</td><td>PT Simas Insurtech</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td><td>GT9000ABCD</td>
             <td class="num">12,847.3</td><td class="num">3</td><td class="num na">N/A</td><td class="num">187.4</td>
-            <td class="num">118.0</td><td class="num">42.3</td><td class="num">432.5</td>
-            <td class="num">0</td><td class="num">12</td><td>02:14:30</td><td class="num">7</td>
-            <td class="num">12.4</td><td class="na">N/A (API)</td>
+            <td class="num">118.0</td><td class="num">432.5</td>
+            <td class="num">0</td><td class="num">0</td><td class="num">12</td><td>02:14:30</td><td class="num">7</td>
+            <td class="num">12.4</td>
           </tr>
           <tr>
-            <td>2</td><td>SMAS-002</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td><td>GT9000ABCE</td>
+            <td>2</td><td>SMAS-002</td><td>PT Wahana Tata</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td><td>GT9000ABCE</td>
             <td class="num">8,234.1</td><td class="num">4</td><td class="num na">N/A</td><td class="num">143.2</td>
-            <td class="num">124.0</td><td class="num">38.7</td><td class="num">330.6</td>
-            <td class="num">1</td><td class="num">8</td><td>01:47:00</td><td class="num">12</td>
-            <td class="num">13.1</td><td class="na">N/A (API)</td>
+            <td class="num">124.0</td><td class="num">330.6</td>
+            <td class="num">1</td><td class="num">0</td><td class="num">8</td><td>01:47:00</td><td class="num">12</td>
+            <td class="num">13.1</td>
           </tr>
           <tr>
-            <td>3</td><td>SMAS-003</td><td style="font-family:monospace;font-size:12px">MHFRK59K4BJ000123</td><td>GT9000ABCF</td>
+            <td>3</td><td>SMAS-003</td><td>PT Asuransi Bintang</td><td style="font-family:monospace;font-size:12px">MHFRK59K4BJ000123</td><td>GT9000ABCF</td>
             <td class="num">15,123.8</td><td class="num">2</td><td class="num na">N/A</td><td class="num">224.1</td>
-            <td class="num">112.0</td><td class="num">45.1</td><td class="num">517.1</td>
-            <td class="num">0</td><td class="num">15</td><td>03:02:15</td><td class="num">3</td>
-            <td class="num batt-low">10.8</td><td class="na">N/A (API)</td>
+            <td class="num">112.0</td><td class="num">517.1</td>
+            <td class="num">0</td><td class="num">0</td><td class="num">15</td><td>03:02:15</td><td class="num">3</td>
+            <td class="num batt-low">10.8</td>
           </tr>
           <tr>
-            <td>4</td><td>SMAS-004</td><td style="font-family:monospace;font-size:12px">JT3HN86R8W0067890</td><td>GT9000ABCG</td>
-            <td class="num">6,891.4</td><td class="num">5</td><td class="num na">N/A</td><td class="num">98.7</td>
-            <td class="num">109.0</td><td class="num">36.2</td><td class="num">227.8</td>
-            <td class="num">2</td><td class="num">6</td><td>01:12:45</td><td class="num">5</td>
-            <td class="num batt-low">11.2</td><td class="na">N/A (API)</td>
+            <td>4</td><td>SMAS-004</td><td>PT Asuransi Ramayana</td><td style="font-family:monospace;font-size:12px">JT3HN86R8W0067890</td><td>GT9000ABCG</td>
+            <td class="num">6,891.4</td><td class="num">5</td><td class="num">32</td><td class="num">98.7</td>
+            <td class="num">109.0</td><td class="num">227.8</td>
+            <td class="num">2</td><td class="num">0</td><td class="num">6</td><td>01:12:45</td><td class="num">5</td>
+            <td class="num batt-low">11.2</td>
           </tr>
           <tr>
-            <td>5</td><td>SMAS-005</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td><td>GT9000ABCH</td>
+            <td>5</td><td>SMAS-005</td><td>PT Simas Insurtech</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td><td>GT9000ABCH</td>
             <td class="num">21,456.7</td><td class="num">3</td><td class="num na">N/A</td><td class="num">312.8</td>
-            <td class="num">131.0</td><td class="num">51.4</td><td class="num">722.2</td>
-            <td class="num">0</td><td class="num">22</td><td>04:38:00</td><td class="num">18</td>
-            <td class="num">12.7</td><td class="na">N/A (API)</td>
+            <td class="num">131.0</td><td class="num">722.2</td>
+            <td class="num">0</td><td class="num">0</td><td class="num">22</td><td>04:38:00</td><td class="num">18</td>
+            <td class="num">12.7</td>
           </tr>
           <tr>
-            <td>6</td><td>SMAS-006</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td><td>GT9000ABCI</td>
-            <td class="num">9,321.5</td><td class="num">4</td><td class="num na">N/A</td><td class="num">134.5</td>
-            <td class="num">97.0</td><td class="num">33.8</td><td class="num">310.5</td>
-            <td class="num">3</td><td class="num">9</td><td>02:05:30</td><td class="num">9</td>
-            <td class="num">12.6</td><td class="na">N/A (API)</td>
+            <td>6</td><td>SMAS-006</td><td>PT Tokio Marine</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td><td>GT9000ABCI</td>
+            <td class="num">9,321.5</td><td class="num">4</td><td class="num">58</td><td class="num">134.5</td>
+            <td class="num">97.0</td><td class="num">310.5</td>
+            <td class="num">2</td><td class="num warn">1</td><td class="num">9</td><td>02:05:30</td><td class="num">9</td>
+            <td class="num">12.6</td>
           </tr>
           <tr>
-            <td>7</td><td>SMAS-007</td><td style="font-family:monospace;font-size:12px">JT3HN86R2W0071234</td><td>GT9000ABCJ</td>
+            <td>7</td><td>SMAS-007</td><td>PT Wahana Tata</td><td style="font-family:monospace;font-size:12px">JT3HN86R2W0071234</td><td>GT9000ABCJ</td>
             <td class="num">4,567.2</td><td class="num">2</td><td class="num na">N/A</td><td class="num">67.3</td>
-            <td class="num">103.0</td><td class="num">29.4</td><td class="num">155.4</td>
-            <td class="num">0</td><td class="num">4</td><td>00:48:20</td><td class="num">2</td>
-            <td class="num">13.0</td><td class="na">N/A (API)</td>
+            <td class="num">103.0</td><td class="num">155.4</td>
+            <td class="num">0</td><td class="num">0</td><td class="num">4</td><td>00:48:20</td><td class="num">2</td>
+            <td class="num">13.0</td>
           </tr>
           <tr>
-            <td>8</td><td>SMAS-008</td><td style="font-family:monospace;font-size:12px">MR0HY8CD9J0345678</td><td>GT9000ABCK</td>
-            <td class="num">18,934.6</td><td class="num">6</td><td class="num na">N/A</td><td class="num">278.2</td>
-            <td class="num">126.0</td><td class="num">47.8</td><td class="num">642.5</td>
-            <td class="num">1</td><td class="num">18</td><td>03:45:10</td><td class="num">14</td>
-            <td class="num">12.5</td><td class="na">N/A (API)</td>
+            <td>8</td><td>SMAS-008</td><td>PT Asuransi Bintang</td><td style="font-family:monospace;font-size:12px">MR0HY8CD9J0345678</td><td>GT9000ABCK</td>
+            <td class="num">18,934.6</td><td class="num">6</td><td class="num">141</td><td class="num">278.2</td>
+            <td class="num">126.0</td><td class="num">642.5</td>
+            <td class="num">1</td><td class="num">0</td><td class="num">18</td><td>03:45:10</td><td class="num">14</td>
+            <td class="num">12.5</td>
           </tr>
         </tbody>
       </table>
+    </div>
+    <div class="smas-pagination" id="vehiclePagination">
+      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehiclePrev" onclick="vehiclePage(-1)">&#8249; Prev</button>
+      <span class="smas-pg-info" id="vehiclePageInfo">Page 1 of 1</span>
+      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehicleNext" onclick="vehiclePage(1)">Next &#8250;</button>
+      <button class="kml-btn kml-btn--text smas-pg-btn" id="vehicleShowAll" onclick="vehicleToggleAll()">Show All</button>
     </div>
 
     <!-- Trip Detail collapsible -->
     <details class="smas-trip-detail">
       <summary>
-        <span>Trip Detail &nbsp;<span style="font-weight:400;color:var(--color-text-secondary)">(showing first 5 of 1,247 trips)</span></span>
+        <span>Trip Detail &nbsp;<span id="tripHeadingCount" style="font-weight:400;color:var(--color-text-secondary)">showing 5 of 1,247 trips</span></span>
         <svg class="trip-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
           <path d="M7 10l5 5 5-5z"/>
         </svg>
@@ -769,45 +789,52 @@
           <thead>
             <tr>
               <th>Vehicle Name</th>
+              <th>Customer</th>
               <th>VIN</th>
               <th>Trip Start</th>
               <th>Trip End</th>
               <th>Duration</th>
               <th class="num">Distance (km)</th>
-              <th class="num">Avg Speed</th>
-              <th class="num">Max Speed</th>
+              <th class="num">Avg Speed (km/h)</th>
+              <th class="num">Max Speed (km/h)</th>
               <th>Idling Duration</th>
               <th class="num">Odometer End (km)</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tripTbody">
             <tr>
-              <td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
-              <td>2025-01-02 08:14:23</td><td>2025-01-02 09:47:11</td><td>01:32:48</td>
+              <td>SMAS-001</td><td>PT Simas Insurtech</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
+              <td>2026-01-02 08:14:23</td><td>2026-01-02 09:47:11</td><td>01:32:48</td>
               <td class="num">67.4</td><td class="num">43.8</td><td class="num">118.0</td><td>00:12:30</td><td class="num">11,234.1</td>
             </tr>
             <tr>
-              <td>SMAS-001</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
-              <td>2025-01-03 07:52:06</td><td>2025-01-03 10:11:44</td><td>02:19:38</td>
+              <td>SMAS-001</td><td>PT Simas Insurtech</td><td style="font-family:monospace;font-size:12px">JT3HN86R5W0064234</td>
+              <td>2026-01-03 07:52:06</td><td>2026-01-03 10:11:44</td><td>02:19:38</td>
               <td class="num">98.2</td><td class="num">42.2</td><td class="num">97.0</td><td>00:28:15</td><td class="num">11,332.3</td>
             </tr>
             <tr>
-              <td>SMAS-002</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td>
-              <td>2025-01-02 09:01:35</td><td>2025-01-02 10:44:22</td><td>01:42:47</td>
+              <td>SMAS-002</td><td>PT Wahana Tata</td><td style="font-family:monospace;font-size:12px">MR0HY8CD1J0123456</td>
+              <td>2026-01-02 09:01:35</td><td>2026-01-02 10:44:22</td><td>01:42:47</td>
               <td class="num">72.3</td><td class="num">42.1</td><td class="num">124.0</td><td>00:15:00</td><td class="num">7,812.4</td>
             </tr>
             <tr>
-              <td>SMAS-005</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td>
-              <td>2025-01-04 06:30:00</td><td>2025-01-04 11:15:33</td><td>04:45:33</td>
+              <td>SMAS-005</td><td>PT Simas Insurtech</td><td style="font-family:monospace;font-size:12px">MR0HY8CD5J0234567</td>
+              <td>2026-01-04 06:30:00</td><td>2026-01-04 11:15:33</td><td>04:45:33</td>
               <td class="num">234.1</td><td class="num">49.2</td><td class="num">131.0</td><td>00:41:20</td><td class="num">20,123.8</td>
             </tr>
             <tr>
-              <td>SMAS-006</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td>
-              <td>2025-01-02 13:20:17</td><td>2025-01-02 15:08:49</td><td>01:48:32</td>
+              <td>SMAS-006</td><td>PT Tokio Marine</td><td style="font-family:monospace;font-size:12px">MHFRK59K0BJ000456</td>
+              <td>2026-01-02 13:20:17</td><td>2026-01-02 15:08:49</td><td>01:48:32</td>
               <td class="num">61.8</td><td class="num">34.1</td><td class="num">97.0</td><td>00:23:45</td><td class="num">8,654.2</td>
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="smas-pagination" id="tripPagination" style="padding: var(--sp-3) var(--sp-4) var(--sp-2);">
+        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripPrev" onclick="tripPage(-1)">&#8249; Prev</button>
+        <span class="smas-pg-info" id="tripPageInfo">Page 1 of 1</span>
+        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripNext" onclick="tripPage(1)">Next &#8250;</button>
+        <button class="kml-btn kml-btn--text smas-pg-btn" id="tripShowAll" onclick="tripToggleAll()">Show All</button>
       </div>
     </details>
 
@@ -859,6 +886,10 @@
     });
     document.getElementById(id).classList.add('active');
     window.scrollTo(0, 0);
+    if (id === 'screen-preview') {
+      renderVehicleTable();
+      renderTripTable();
+    }
   }
 
   function goBack() { showScreen('screen-config'); }
@@ -889,7 +920,6 @@
   var STEPS = [
     'Connecting to MyGeotab',
     'Fetching vehicle list',
-    'Detecting fuel types per vehicle',
     'Fetching trips',
     'Fetching fuel consumed & exceptions',
     'Fetching battery voltage data',
@@ -941,7 +971,112 @@
     t.classList.add('visible');
     setTimeout(function () { t.classList.remove('visible'); }, 3000);
   }
+
+  /* ── Pagination ────────────────────────────────────────── */
+  var PAGE_SIZE = 50;
+
+  var vehicleCurrentPage = 1;
+  var vehicleShowAllFlag = false;
+
+  function vehiclePage(delta) {
+    var rows = document.querySelectorAll('#vehicleTbody tr');
+    var totalPages = Math.ceil(rows.length / PAGE_SIZE);
+    vehicleCurrentPage = Math.max(1, Math.min(vehicleCurrentPage + delta, totalPages));
+    renderVehicleTable();
+  }
+
+  function vehicleToggleAll() {
+    vehicleShowAllFlag = !vehicleShowAllFlag;
+    vehicleCurrentPage = 1;
+    renderVehicleTable();
+  }
+
+  function renderVehicleTable() {
+    var rows = Array.from(document.querySelectorAll('#vehicleTbody tr'));
+    var total = rows.length;
+    var totalPages = Math.ceil(total / PAGE_SIZE);
+    var start = vehicleShowAllFlag ? 0 : (vehicleCurrentPage - 1) * PAGE_SIZE;
+    var end   = vehicleShowAllFlag ? total : Math.min(start + PAGE_SIZE, total);
+
+    rows.forEach(function (r, i) {
+      r.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+
+    document.getElementById('vehiclePageInfo').textContent =
+      vehicleShowAllFlag ? ('Showing all ' + total) : ('Page ' + vehicleCurrentPage + ' of ' + totalPages);
+    document.getElementById('vehiclePrev').disabled = vehicleShowAllFlag || vehicleCurrentPage === 1;
+    document.getElementById('vehicleNext').disabled = vehicleShowAllFlag || vehicleCurrentPage === totalPages;
+    document.getElementById('vehicleShowAll').textContent = vehicleShowAllFlag ? 'Paginate' : 'Show All';
+
+    var rangeText = vehicleShowAllFlag
+      ? ('showing all ' + total + ' vehicles')
+      : ('showing ' + (start + 1) + '–' + end + ' of ' + total + ' vehicles');
+    document.getElementById('vehicleHeadingCount').textContent = rangeText;
+  }
+
+  var tripCurrentPage = 1;
+  var tripShowAllFlag = false;
+
+  function tripPage(delta) {
+    var rows = document.querySelectorAll('#tripTbody tr');
+    var totalPages = Math.ceil(rows.length / PAGE_SIZE);
+    tripCurrentPage = Math.max(1, Math.min(tripCurrentPage + delta, totalPages));
+    renderTripTable();
+  }
+
+  function tripToggleAll() {
+    tripShowAllFlag = !tripShowAllFlag;
+    tripCurrentPage = 1;
+    renderTripTable();
+  }
+
+  function renderTripTable() {
+    var rows = Array.from(document.querySelectorAll('#tripTbody tr'));
+    var total = rows.length;
+    var totalPages = Math.ceil(total / PAGE_SIZE);
+    var start = tripShowAllFlag ? 0 : (tripCurrentPage - 1) * PAGE_SIZE;
+    var end   = tripShowAllFlag ? total : Math.min(start + PAGE_SIZE, total);
+
+    rows.forEach(function (r, i) {
+      r.style.display = (i >= start && i < end) ? '' : 'none';
+    });
+
+    document.getElementById('tripPageInfo').textContent =
+      tripShowAllFlag ? ('Showing all ' + total) : ('Page ' + tripCurrentPage + ' of ' + totalPages);
+    document.getElementById('tripPrev').disabled = tripShowAllFlag || tripCurrentPage === 1;
+    document.getElementById('tripNext').disabled = tripShowAllFlag || tripCurrentPage === totalPages;
+    document.getElementById('tripShowAll').textContent = tripShowAllFlag ? 'Paginate' : 'Show All';
+
+    var rangeText = tripShowAllFlag
+      ? ('showing all ' + total + ' trips')
+      : ('showing ' + (start + 1) + '–' + end + ' of ' + total + ' trips');
+    document.getElementById('tripHeadingCount').textContent = rangeText;
+  }
+
+  /* ── Expose hooks for the live add-in module ────────────────────
+   * addin.js will overwrite window.startGenerating and window.downloadExcel
+   * inside its `initialize` lifecycle when this page is loaded as a
+   * MyGeotab add-in. Standalone (no MyGeotab host) keeps the mockup
+   * behaviour defined above. */
+  window.showScreen        = showScreen;
+  window.renderSteps       = renderSteps;
+  window.renderVehicleTable = renderVehicleTable;
+  window.renderTripTable   = renderTripTable;
+  window.startGenerating   = startGenerating;
+  window.downloadExcel     = downloadExcel;
+
+  /* Stub the geotab namespace so addin.js can safely register itself
+   * even when this page is opened directly (no MyGeotab host). */
+  window.geotab = window.geotab || { addin: {} };
+  window.geotab.addin = window.geotab.addin || {};
 </script>
+
+<!-- ExcelJS — used by addin.js to build the styled .xlsx -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+<!-- Live add-in module: registers geotab.addin.smasMobilityFleetReport.
+     When MyGeotab loads this page it invokes the lifecycle and the
+     module overrides startGenerating/downloadExcel with live versions. -->
+<script src="addin.js"></script>
 
 </body>
 </html>

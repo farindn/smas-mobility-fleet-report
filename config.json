@@ -1,0 +1,17 @@
+{
+  "name": "smasMobilityFleetReport",
+  "version": "1.0.0",
+  "supportEmail": "farinnugraha@geotab.com",
+  "items": [
+    {
+      "version": "1.0.0",
+      "url": "https://farindn.github.io/smas-mobility-fleet-report/mockup.html",
+      "path": "ActivityLink/",
+      "menuName": {
+        "en": "SMAS Mobility Fleet Report"
+      },
+      "icon": "images/icon.svg"
+    }
+  ],
+  "isSigned": false
+}
